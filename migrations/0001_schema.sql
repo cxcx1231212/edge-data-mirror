@@ -1,0 +1,20 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS ad_clicks (id INTEGER PRIMARY KEY AUTOINCREMENT, position_key TEXT NOT NULL, ip_hash TEXT NOT NULL, clicked_at TEXT NOT NULL, ip_address TEXT NOT NULL DEFAULT '', region_name TEXT NOT NULL DEFAULT '', device TEXT NOT NULL DEFAULT '', page_path TEXT NOT NULL DEFAULT '');
+CREATE INDEX IF NOT EXISTS valid_idx ON ad_clicks(position_key,ip_hash,clicked_at);
+CREATE INDEX IF NOT EXISTS clicked_idx ON ad_clicks(clicked_at);
+CREATE TABLE IF NOT EXISTS ad_stats (position_key TEXT PRIMARY KEY, impressions INTEGER NOT NULL DEFAULT 0, total_clicks INTEGER NOT NULL DEFAULT 0, valid_clicks INTEGER NOT NULL DEFAULT 0, last_clicked_at TEXT);
+CREATE TABLE IF NOT EXISTS admin_login_attempts (identifier TEXT PRIMARY KEY, attempts INTEGER NOT NULL DEFAULT 0, locked_until TEXT, updated_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS admins (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, created_at TEXT DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS ads (position_key TEXT PRIMARY KEY, image_path TEXT NOT NULL DEFAULT '', link_url TEXT NOT NULL DEFAULT '', enabled INTEGER NOT NULL DEFAULT 0, updated_at TEXT DEFAULT CURRENT_TIMESTAMP, display_mode TEXT NOT NULL DEFAULT 'daily', delay_seconds INTEGER NOT NULL DEFAULT 1, start_at TEXT, end_at TEXT);
+CREATE TABLE IF NOT EXISTS analytics_daily (visit_date TEXT NOT NULL, lottery_type INTEGER NOT NULL, section_key TEXT NOT NULL, device TEXT NOT NULL, views INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(visit_date,lottery_type,section_key,device));
+CREATE INDEX IF NOT EXISTS date_idx ON analytics_daily(visit_date);
+CREATE TABLE IF NOT EXISTS analytics_visitors (ip_address TEXT PRIMARY KEY, country TEXT NOT NULL DEFAULT '', region_name TEXT NOT NULL DEFAULT '', city TEXT NOT NULL DEFAULT '', first_seen TEXT NOT NULL, last_seen TEXT NOT NULL, views INTEGER NOT NULL DEFAULT 1);
+CREATE INDEX IF NOT EXISTS last_seen_idx ON analytics_visitors(last_seen);
+CREATE TABLE IF NOT EXISTS automation_runs (id INTEGER PRIMARY KEY AUTOINCREMENT, task_key TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'running', summary TEXT, error_message TEXT, started_at TEXT NOT NULL, finished_at TEXT);
+CREATE INDEX IF NOT EXISTS idx_task_time ON automation_runs(task_key,started_at);
+CREATE TABLE IF NOT EXISTS materials (id INTEGER PRIMARY KEY AUTOINCREMENT, lottery_type INTEGER NOT NULL DEFAULT 1, section_key TEXT NOT NULL, source_name TEXT NOT NULL, period TEXT NOT NULL, content TEXT NOT NULL, result_special TEXT, hit_status TEXT NOT NULL DEFAULT 'pending', published INTEGER NOT NULL DEFAULT 1, created_at TEXT DEFAULT CURRENT_TIMESTAMP, updated_at TEXT DEFAULT CURRENT_TIMESTAMP, UNIQUE(lottery_type,section_key,source_name,period));
+CREATE INDEX IF NOT EXISTS list_idx ON materials(lottery_type,section_key,published,period);
+CREATE TABLE IF NOT EXISTS public_rate_limits (bucket_key TEXT NOT NULL, ip_hash TEXT NOT NULL, window_start TEXT NOT NULL, hits INTEGER NOT NULL DEFAULT 1, PRIMARY KEY(bucket_key,ip_hash));
+CREATE INDEX IF NOT EXISTS window_idx ON public_rate_limits(window_start);
+CREATE TABLE IF NOT EXISTS smart_strategy_state (lottery_type INTEGER NOT NULL, section_key TEXT NOT NULL, source_name TEXT NOT NULL, backtest_hits INTEGER NOT NULL DEFAULT 0, backtest_total INTEGER NOT NULL DEFAULT 0, retired INTEGER NOT NULL DEFAULT 0, updated_at TEXT DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(lottery_type,section_key,source_name));

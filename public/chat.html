@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>聊天室－一路发平特</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#080808;color:#eee;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif}.chat-page{width:min(100%,760px);min-height:100vh;margin:auto;background:#0d0d0d;display:flex;flex-direction:column}.chat-top{height:58px;display:grid;grid-template-columns:64px 1fr 64px;align-items:center;padding:0 10px;border-bottom:1px solid #342a16;background:#090806;position:sticky;top:0;z-index:3}.chat-top a{color:#e7c55e;text-decoration:none;font-size:15px}.chat-title{text-align:center}.chat-title strong{display:block;color:#f0cf69;font-size:18px}.chat-title span{display:block;margin-top:2px;color:#62d483;font-size:11px}.chat-rule{padding:9px 12px;border-bottom:1px solid #2b2619;background:#151208;color:#cdbb7a;font-size:12px;line-height:1.55}.chat-list{flex:1;min-height:430px;padding:14px 11px 128px;overflow-y:auto}.chat-day{text-align:center;margin:2px 0 15px;color:#777;font-size:11px}.message{display:flex;gap:8px;margin-bottom:14px;align-items:flex-start}.avatar{width:34px;height:34px;flex:0 0 34px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#3e3110,#171309);border:1px solid #695422;color:#f3ce61;font-weight:900}.message-body{min-width:0;max-width:78%}.message-meta{display:flex;align-items:center;gap:7px;margin:0 0 5px;color:#aaa;font-size:11px}.message-meta b{color:#dfca88;font-size:12px}.bubble{display:inline-block;padding:9px 11px;border:1px solid #373021;border-radius:3px 12px 12px;background:#191713;color:#eee;font-size:14px;line-height:1.55;overflow-wrap:anywhere}.message.self{flex-direction:row-reverse}.message.self .message-body{text-align:right}.message.self .message-meta{justify-content:flex-end}.message.self .bubble{border-color:#72591c;background:#2b220c;color:#f4df9c;border-radius:12px 3px 12px 12px}.composer{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,760px);padding:8px 10px max(10px,env(safe-area-inset-bottom));border-top:1px solid #3d321b;background:rgba(13,13,13,.97);backdrop-filter:blur(9px)}.join-row,.send-row{display:flex;gap:7px}.join-row{margin-bottom:7px}.composer input{min-width:0;height:40px;border:1px solid #403921;border-radius:8px;background:#181818;color:#fff;padding:0 11px;font:14px inherit;outline:none}.composer input:focus{border-color:#a4822d}.nickname{width:116px}.message-input{flex:1}.composer button{height:40px;border:0;border-radius:8px;padding:0 17px;background:linear-gradient(180deg,#e4bd48,#a77b16);color:#151006;font-weight:900;font-family:inherit;cursor:pointer}.emoji-row{display:flex;gap:9px;align-items:center;margin-bottom:7px;color:#999;font-size:18px}.emoji-row button{height:auto;padding:0;background:none;color:inherit;font-size:18px}.status{flex:1;text-align:right;color:#777;font-size:11px}.toast{position:fixed;left:50%;bottom:122px;transform:translateX(-50%);padding:8px 13px;border-radius:20px;background:#3b1c17;color:#ff9e90;font-size:12px;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}@media(max-width:430px){.chat-list{min-height:calc(100vh - 104px)}.message-body{max-width:83%}.nickname{width:98px}.composer button{padding:0 14px}.chat-rule{font-size:11px}}
+    .emoji-row button{height:28px;padding:0 9px;border:1px solid #403921;border-radius:14px;background:#18150d;color:#d9c47e;font-size:12px;font-weight:600}
+  </style>
+</head>
+<body>
+<main class="chat-page">
+  <header class="chat-top"><a href="index.html">‹ 返回</a><div class="chat-title"><strong>一路发聊天室</strong><span><i id="online">3</i> 人在线</span></div><span></span></header>
+  <div class="chat-rule">文明交流 · 禁止广告、网址和刷屏 · 聊天记录保留7天</div>
+  <section class="chat-list" id="chatList" aria-live="polite"><div class="chat-day">今天</div></section>
+  <form class="composer" id="chatForm">
+    <div class="emoji-row"><button type="button" data-quick="期待开奖">期待开奖</button><button type="button" data-quick="祝大家好运">祝大家好运</button><button type="button" data-quick="一路发">一路发</button><span class="status" id="status">连接中…</span></div>
+    <div class="send-row"><input class="nickname" id="nickname" maxlength="12" placeholder="你的昵称" autocomplete="nickname"><input class="message-input" id="messageInput" maxlength="120" placeholder="仅限中文、数字和空格" autocomplete="off"><button type="submit">发送</button></div>
+  </form>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+(()=>{
+  const list=document.getElementById('chatList'),form=document.getElementById('chatForm'),nickname=document.getElementById('nickname'),input=document.getElementById('messageInput'),status=document.getElementById('status'),online=document.getElementById('online'),toast=document.getElementById('toast');
+  const api='https://lhwxdh.235-from.com/api/chat/v1';let lastId=0,pollTimer=null,preview=false;
+  const token=localStorage.chatToken||(localStorage.chatToken=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2)));
+  nickname.value=localStorage.chatNickname||('一路发游客'+Math.floor(1000+Math.random()*9000));
+  const demo=[{id:-3,nickname:'老街阿明',message:'大家晚上好，澳门这期准备开奖了。',time:'21:26'},{id:-2,nickname:'一路发客服',message:'欢迎来到聊天室，请文明交流，不要发送广告链接。',time:'21:27'},{id:-1,nickname:'好运常来',message:'首页开奖会自动刷新，不用手动刷新 👍',time:'21:28'}];
+  function escInitial(name){return [...name][0]||'友'}
+  function add(item,self=false){if(item.id&&document.querySelector('[data-id="'+item.id+'"]'))return;const row=document.createElement('article');row.className='message'+(self?' self':'');row.dataset.id=item.id||'';const avatar=document.createElement('span');avatar.className='avatar';avatar.textContent=escInitial(item.nickname);const body=document.createElement('div');body.className='message-body';const meta=document.createElement('div');meta.className='message-meta';const name=document.createElement('b');name.textContent=item.nickname;const time=document.createElement('span');time.textContent=item.createdAt?new Date(item.createdAt).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}):(item.time||'刚刚');meta.append(name,time);const bubble=document.createElement('div');bubble.className='bubble';bubble.textContent=item.content??item.message??'';body.append(meta,bubble);row.append(avatar,body);list.appendChild(row);if(Number(item.id)>lastId)lastId=Number(item.id);}
+  function show(text){toast.textContent=text;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800)}
+  function scrollBottom(){list.scrollTop=list.scrollHeight}
+  async function poll(){try{const name=nickname.value.trim();const res=await fetch(api+'?device='+encodeURIComponent(token)+'&nickname='+encodeURIComponent(name),{cache:'no-store'});if(!res.ok)throw 0;const data=await res.json();(data.messages||[]).forEach(item=>add(item,item.deviceId===token));online.textContent=data.online||1;status.textContent=(data.viewerLocation?data.viewerLocation+' · ':'')+'实时连接';preview=false;if(data.messages?.length)scrollBottom();}catch(_){if(!preview){demo.forEach(item=>add(item));preview=true;status.textContent='接口连接失败';scrollBottom();}}finally{pollTimer=setTimeout(poll,2000)}}
+  form.addEventListener('submit',async event=>{event.preventDefault();const name=nickname.value.trim(),message=input.value.trim();if(name.length<2){show('请填写2–12个字的昵称');nickname.focus();return}if(!message){input.focus();return}if(!/^[\u3400-\u9fff0-9\s]+$/u.test(message)){show('只允许中文、数字和空格');return}localStorage.chatNickname=name;try{const res=await fetch(api,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({deviceId:token,nickname:name,content:message})});const data=await res.json();if(!res.ok){show(data.message||'发送失败');return}input.value='';show('发送成功');setTimeout(poll,120);}catch(_){show('连接失败，请稍后重试')}});
+  document.querySelectorAll('[data-quick]').forEach(button=>button.onclick=()=>{input.value=button.dataset.quick;input.focus()});
+  nickname.addEventListener('change',()=>{nickname.value=nickname.value.replace(/[^\u3400-\u9fff0-9]/gu,'').slice(0,12);localStorage.chatNickname=nickname.value});poll();
+})();
+</script>
+<script src="/assets/cnzz-stat.js"></script></body>
+</html>

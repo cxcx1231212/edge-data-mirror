@@ -1,0 +1,10 @@
+liuhe-cf-migration.sql.gz
+liuhe-d1.sqlite3
+migrations/0002_data.sql
+.wrangler/
+node_modules/
+.dev.vars
+.env*
+!.env.example
+.DS_Store
+*.log

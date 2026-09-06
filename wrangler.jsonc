@@ -1,0 +1,51 @@
+{
+	"$schema": "../node_modules/wrangler/config-schema.json",
+	"name": "yilufa-pingte",
+	"main": "src/index.js",
+	"compatibility_date": "2026-08-17",
+	"workers_dev": true,
+	"assets": {
+		"directory": "./public",
+		"binding": "STATIC_ASSETS",
+		"run_worker_first": [
+			"/",
+			"/*.html",
+			"/api/*",
+			"/admin",
+			"/admin/*",
+			"/wuqi-data.php",
+			"/cf-assets/*"
+		]
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "yilufa-pingte-db",
+			"database_id": "9105eb82-b91a-4326-9a56-118648a0e941"
+		}
+	],
+	"kv_namespaces": [
+		{
+			"binding": "ASSETS_KV",
+			"id": "a25a33b7b8cd48d8ad3db1ed2e2b2b1d"
+		}
+	],
+	"services": [
+		{
+			"binding": "LIUHE_CHAT",
+			"service": "xinshui-chat-api"
+		},
+		{
+			"binding": "CENTRAL_LINKS",
+			"service": "123-liuhe-site"
+		}
+	],
+	"triggers": {
+		"crons": [
+			"10 * * * *"
+		]
+	},
+	"observability": {
+		"enabled": true
+	}
+}

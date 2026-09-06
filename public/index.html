@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="materials-booting">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#050505" />
+  <title>一路发平特资料站</title>
+  <style>
+    :root{
+      --bg:#050505;
+      --panel:#0b0c0d;
+      --panel2:#101214;
+      --line:#2a2d31;
+      --gold:#f5c84b;
+      --text:#f5f5f5;
+      --muted:#a9adb3;
+      --red:#ff2d2d;
+      --purple:#a855f7;
+      --orange:#ff7a00;
+      --green:#7bdc2b;
+      --blue:#2f8cff;
+      --cyan:#1fd4e5;
+      --yellow:#ffd400;
+      --radius:14px;
+    }
+
+    *{box-sizing:border-box}
+    html{background:var(--bg)}
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at 50% -20%, rgba(245,200,75,.07), transparent 34%),
+        var(--bg);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    .page{
+      width:min(100%, 760px);
+      margin:0 auto;
+      padding:14px 12px 36px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:clamp(28px,7vw,42px);
+      line-height:1.05;
+      font-weight:900;
+      letter-spacing:.5px;
+      text-shadow:0 2px 14px rgba(245,200,75,.14);
+    }
+
+    .brand-name{
+      color:var(--gold);
+    }
+
+    .brand-topic{
+      margin-left:5px;
+      color:#ff5b4d;
+      font-style:normal;
+      text-shadow:0 2px 14px rgba(255,74,61,.18);
+    }
+
+    .brand p{
+      margin:7px 0 0;
+      color:#e9e9e9;
+      font-size:15px;
+      letter-spacing:.3px;
+    }
+
+    .brand-domain{
+      margin-top:7px;
+      color:#f0d57d;
+      font-size:13px;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:2.4px;
+      text-transform:uppercase;
+    }
+
+    .brand-lockup{display:flex;align-items:center;gap:9px;min-width:0}
+    .brand-mark{position:relative;display:grid;place-items:center;width:67px;height:47px;flex:0 0 67px;color:#f5c84b;font-size:26px;font-weight:1000;font-style:italic;letter-spacing:-3px;line-height:1;text-shadow:0 2px 8px rgba(245,200,75,.18)}
+    .brand-mark::before{content:"";position:absolute;inset:4px 1px 2px;border:2px solid #8f6d1e;border-left-color:#e14436;border-radius:50%;transform:skewX(-16deg) rotate(-8deg)}
+    .brand-mark::after{content:"";position:absolute;right:2px;top:1px;width:13px;height:5px;border-radius:8px 8px 1px 8px;background:#e14436;transform:rotate(-22deg)}
+    .brand-mark b{position:relative;z-index:1;font:inherit}
+    .brand-copy{display:flex;flex-direction:column;min-width:0}
+    .brand-title{display:flex;align-items:baseline;white-space:nowrap;font-size:clamp(24px,4.4vw,34px);font-weight:950;line-height:1.08;letter-spacing:.5px}
+    .brand-title b{color:#f2cf68;font:inherit}
+    .brand-title em{margin-left:5px;color:#f05a4f;font:inherit;font-style:normal}
+    .brand-lockup .brand-domain{margin-top:5px;font-size:12px;letter-spacing:2.2px;color:#d8bf70}
+
+    .lottery-switch{
+      position:relative;
+      flex:0 0 auto;
+    }
+
+    .lottery-btn{
+      height:44px;
+      padding:0 14px;
+      border:1px solid #9f7d0d;
+      border-radius:999px;
+      background:#0a0a0a;
+      color:var(--gold);
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .lottery-chevron{width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .2s ease;margin-left:2px}
+    .lottery-switch:has(.lottery-menu.open) .lottery-chevron{transform:rotate(225deg) translate(-2px,-2px)}
+
+    .lottery-menu{
+      position:absolute;
+      right:0;top:52px;
+      width:166px;
+      background:#101214;
+      border:1px solid #34373b;
+      border-radius:12px;
+      overflow:hidden;
+      display:none;
+      z-index:20;
+      box-shadow:0 12px 28px rgba(0,0,0,.45);
+    }
+
+    .lottery-menu.open{display:block}
+    .lottery-menu button{
+      width:100%;
+      border:0;
+      border-bottom:1px solid #26292d;
+      background:transparent;
+      color:#fff;
+      text-align:left;
+      padding:12px 14px;
+      font-size:16px;
+      cursor:pointer;
+    }
+    .lottery-menu button:last-child{border-bottom:0}
+    .lottery-menu button:hover{background:#211c0f;color:var(--gold)}
+
+    .draw-row{
+      display:grid;
+      grid-template-columns: .82fr 1.45fr;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .card{
+      background:linear-gradient(180deg,#111315 0%,#0a0b0c 100%);
+      border:1px solid #26292d;
+      border-radius:var(--radius);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.015);
+    }
+
+    .countdown-card{
+      padding:14px 14px 12px;
+      text-align:center;
+      min-height:150px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .period{
+      font-size:19px;
+      font-weight:800;
+    }
+
+    .period strong{color:var(--gold)}
+    .label{
+      margin-top:7px;
+      color:#e7e7e7;
+      font-size:14px;
+    }
+    .countdown{
+      margin:4px 0 2px;
+      color:#ffd45b;
+      font-size:clamp(34px,8vw,52px);
+      font-weight:900;
+      letter-spacing:1px;
+      line-height:1;
+    }
+    .draw-time{
+      color:#efefef;
+      font-size:14px;
+      margin-top:6px;
+    }
+
+    .result-card{
+      padding:14px 14px 12px;
+      min-height:150px;
+      position:relative;
+    }
+
+    .result-title{
+      font-size:18px;
+      font-weight:800;
+      margin-bottom:12px;
+    }
+    .result-title small{
+      color:#c0c3c8;
+      font-size:13px;
+      font-weight:500;
+      margin-left:4px;
+    }
+    .balls{
+      display:flex;
+      flex-wrap:nowrap;
+      align-items:center;
+      gap:6px;
+      padding-right:2px;
+      overflow:visible;
+    }
+    .ball{
+      width:40px;height:40px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      font-size:18px;
+      color:white;
+      background:linear-gradient(180deg,#ef3737,#c91717);
+      box-shadow:inset 0 -3px 0 rgba(0,0,0,.16);
+    }
+    .ball.blue{background:linear-gradient(180deg,#3479ff,#114dcc)}
+    .plus{
+      color:#f6d15a;
+      font-size:25px;
+      font-weight:800;
+      padding:0 2px;
+    }
+    .history-link{
+      position:absolute;
+      right:14px;
+      bottom:12px;
+      color:var(--gold);
+      font-size:15px;
+      text-decoration:none;
+      font-weight:800;
+    }
+
+    .section{
+      margin-top:9px;
+      padding:10px;
+    }
+
+    .section::after{
+      content:"168PT.COM";
+      display:block;
+      margin-top:8px;
+      padding-top:6px;
+      border-top:1px solid rgba(197,166,72,.13);
+      color:rgba(240,213,125,.55);
+      font-size:10px;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:1.7px;
+      text-align:right;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin:0 0 8px;
+    }
+
+    .section-title .left{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      min-width:0;
+    }
+
+    .section-title h2{
+      margin:0;
+      font-size:19px;
+      line-height:1;
+      font-weight:900;
+    }
+
+    .count{
+      display:none;
+      color:#c5c6ca;
+      font-size:13px;
+      font-weight:600;
+      white-space:nowrap;
+    }
+
+    .more{
+      color:var(--gold);
+      text-decoration:none;
+      font-size:14px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .fire{font-size:20px}
+    .c-red{color:#ff4b4b}.c-purple{color:#b561ff}.c-orange{color:#ff8a1f}
+    .c-green{color:#84db3d}.c-blue{color:#4aa3ff}.c-cyan{color:#25d6e8}
+    .c-yellow{color:#ffd51a}
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:6px;
+    }
+
+    .material{
+      min-height:76px;
+      border:1px solid #3a3020;
+      border-radius:8px;
+      background:#0a0b0c;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:7px 4px;
+      text-align:center;
+    }
+    .material .name{
+      font-size:14px;
+      color:#f1f1f1;
+      margin-bottom:4px;
+      white-space:nowrap;
+    }
+    .material .pick{
+      font-size:26px;
+      font-weight:900;
+      line-height:1.1;
+      letter-spacing:2px;
+    }
+
+    .six-table{
+      display:flex;
+      flex-direction:column;
+      border:1px solid #273025;
+      border-radius:8px;
+      overflow:hidden;
+    }
+    .six-row{
+      display:grid;
+      grid-template-columns:1.15fr 2.3fr;
+      min-height:41px;
+      align-items:center;
+      border-bottom:1px solid #22262a;
+    }
+    .six-row:last-child{border-bottom:0}
+    .six-row .name{
+      padding:0 12px;
+      font-size:15px;
+    }
+    .six-row .pick{
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:4px;
+      padding:0 10px;
+      color:var(--green);
+      font-size:18px;
+      font-weight:800;
+      text-align:center;
+    }
+
+    .five-title{
+      color:#ffd56a;
+    }
+    .five-panel{
+      border-color:#4a171d;
+    }
+    .five-grid{
+      border-top:1px solid #2b2f32;
+      margin-top:4px;
+    }
+    .five-row{
+      display:grid;
+      grid-template-columns:64px 1fr;
+      align-items:center;
+      min-height:42px;
+      border-bottom:1px solid #202326;
+    }
+    .five-row:last-child{border-bottom:0}
+    .issue{
+      padding-left:8px;
+      font-size:16px;
+      color:#f1f1f1;
+      white-space:nowrap;
+    }
+    .numline{
+      display:grid;
+      grid-template-columns:repeat(8,minmax(28px,1fr));
+      gap:5px;
+      align-items:center;
+      padding:4px 2px 4px 4px;
+    }
+    .num{
+      aspect-ratio:1;
+      max-width:34px;
+      min-width:28px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      margin:auto;
+      border:1px solid #8d2630;
+      color:#fff;
+      font-size:13px;
+      font-weight:800;
+      background:#0d0d0e;
+    }
+    .num.hit{
+      background:#ff3855;
+      border-color:#ff3855;
+      box-shadow:0 0 14px rgba(255,56,85,.25);
+    }
+
+    .tail-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:6px;
+    }
+    .tail{
+      min-height:80px;
+      border:1px solid #26384c;
+      border-radius:8px;
+      background:#090b0e;
+      padding:8px 4px;
+      text-align:center;
+    }
+    .tail .name{font-size:13px;color:#f0f0f0;margin-bottom:7px}
+    .tail .value{font-size:24px;color:var(--blue);font-weight:900}
+
+    .combo-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:8px;
+    }
+    .combo-card{
+      border:1px solid #16424a;
+      border-radius:9px;
+      background:#070a0b;
+      padding:9px 9px 10px;
+    }
+    .combo-card.yellow{border-color:#5b5117}
+    .combo-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:6px;
+      font-size:14px;
+      margin-bottom:7px;
+    }
+    .chip{
+      padding:2px 7px;
+      border-radius:999px;
+      font-size:11px;
+      border:1px solid currentColor;
+      opacity:.9;
+      white-space:nowrap;
+    }
+    .combo-nums{
+      display:flex;
+      flex-wrap:wrap;
+      gap:5px;
+    }
+    .combo-num{
+      width:32px;
+      height:32px;
+      flex:0 0 32px;
+      padding:0;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#0c1112;
+      border:1px solid #1f5e68;
+      color:var(--cyan);
+      font-weight:800;
+      font-size:13px;
+      line-height:1;
+    }
+    .combo-card.yellow .combo-num{
+      border-color:#65590d;
+      color:var(--yellow);
+    }
+
+    .idiom-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:8px;
+    }
+    .idiom{
+      border:1px solid #5b3d12;
+      border-radius:9px;
+      background:linear-gradient(180deg,#120c05,#090807);
+      padding:10px 10px 11px;
+      min-height:98px;
+    }
+    .idiom .period-tag{
+      display:inline-block;
+      background:#8c1f1f;
+      color:#fff;
+      border-radius:999px;
+      padding:2px 7px;
+      font-size:11px;
+      margin-bottom:5px;
+    }
+    .idiom .title{
+      color:#ffd04c;
+      font-size:20px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+    .idiom .line{
+      color:#e6e6e6;
+      font-size:13px;
+      line-height:1.7;
+    }
+    .idiom .green{color:#7ee23e}
+
+    @media (max-width:520px){
+      .page{padding:12px 8px 28px}
+      .brand-lockup{gap:6px}
+      .brand-mark{width:54px;height:40px;flex-basis:54px;font-size:22px}
+      .brand-title{font-size:25px}
+      .brand-lockup .brand-domain{font-size:10px;letter-spacing:1.7px;margin-top:4px}
+      .brand h1{font-size:29px}
+      .brand p{font-size:13px}
+      .lottery-btn{height:40px;padding:0 12px;font-size:14px}
+      .draw-row{grid-template-columns:1fr 1.55fr;gap:7px}
+      .countdown-card,.result-card{min-height:136px;padding:11px}
+      .period{font-size:16px}
+      .label,.draw-time{font-size:12px}
+      .result-title{font-size:15px}
+      .ball{width:32px;height:32px;font-size:14px;flex:0 0 32px}
+      .history-link{right:10px;bottom:10px;font-size:13px}
+      .section{padding:8px}
+      .section-title h2{font-size:17px}
+      .count{font-size:12px}
+      .more{font-size:13px}
+      .material{min-height:70px}
+      .material .name{font-size:12px}
+      .material .pick{font-size:22px}
+      .six-row{grid-template-columns:1.1fr 2.5fr;min-height:39px}
+      .six-row .name{font-size:13px;padding:0 8px}
+      .six-row .pick{font-size:16px;padding:0 6px}
+      .tail .name{font-size:11px}
+      .tail .value{font-size:20px}
+      .tail-grid{gap:5px}
+      .combo-num{width:30px;height:30px;flex-basis:30px;font-size:12px}
+      .idiom .title{font-size:18px}
+    }
+
+    @media (max-width:390px){
+      .topbar{align-items:center}
+      .lottery-btn{padding:0 10px}
+      .draw-row{grid-template-columns:.82fr 1.55fr}
+      .countdown-card{min-height:122px}
+      .result-card{min-height:138px}
+      .grid-3{gap:5px}
+      .material{min-height:66px}
+      .material .name{font-size:11.5px}
+      .material .pick{font-size:21px}
+      .tail-grid{grid-template-columns:repeat(2,1fr)}
+      .combo-grid{grid-template-columns:1fr}
+      .idiom-grid{grid-template-columns:1fr}
+    }
+  
+    @media (max-width:390px){
+      .result-card .balls{gap:4px}
+      .result-card .ball{width:29px;height:29px;flex-basis:29px;font-size:12px}
+      .result-card .plus{font-size:19px;padding:0}
+      .result-title{margin-bottom:9px}
+    }
+
+  
+    .draw-unified{
+      display:grid;
+      grid-template-columns:35% 65%;
+      margin-bottom:10px;
+      min-height:150px;
+      overflow:hidden;
+    }
+    .draw-left{
+      padding:14px 10px 12px;
+      text-align:center;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      border-right:1px solid #2a2d31;
+    }
+    .draw-right{
+      position:relative;
+      padding:14px 12px 34px;
+      min-width:0;
+    }
+    .draw-right .balls{
+      width:100%;
+      justify-content:flex-start;
+    }
+    @media (max-width:520px){
+      .draw-unified{grid-template-columns:35% 65%;min-height:138px}
+      .draw-left{padding:11px 6px}
+      .draw-right{padding:11px 8px 31px}
+      .draw-left .countdown{font-size:30px}
+      .draw-right .balls{gap:4px}
+      .draw-right .ball{width:29px;height:29px;flex:0 0 29px;font-size:12px}
+      .draw-right .plus{font-size:18px;padding:0}
+    }
+    @media (max-width:390px){
+      .draw-unified{grid-template-columns:34% 66%}
+      .draw-left .period{font-size:14px}
+      .draw-left .countdown{font-size:27px}
+      .draw-left .draw-time{font-size:10px}
+      .draw-right .result-title{font-size:13px}
+      .draw-right .result-title small{font-size:10px}
+      .draw-right .balls{gap:3px}
+      .draw-right .ball{width:26px;height:26px;flex-basis:26px;font-size:11px}
+      .draw-right .plus{font-size:16px}
+      .draw-right .draw-time{font-size:10px}
+      .draw-right .history-link{font-size:12px}
+    }
+
+  
+    .draw-left .compact-countdown{
+      margin-top:10px;
+      color:#d7d9dc;
+      font-size:14px;
+      line-height:1.2;
+      white-space:nowrap;
+    }
+    .draw-left .compact-countdown strong{
+      color:#ffd45b;
+      font-size:18px;
+      margin-left:3px;
+      letter-spacing:.2px;
+    }
+    @media (max-width:520px){
+      .draw-left .compact-countdown{font-size:12px;margin-top:8px}
+      .draw-left .compact-countdown strong{font-size:16px}
+    }
+    @media (max-width:390px){
+      .draw-left .compact-countdown{font-size:11px}
+      .draw-left .compact-countdown strong{font-size:14px}
+    }
+
+  
+    .draw-strip{
+      min-height:74px;
+      margin-bottom:10px;
+      padding:10px 12px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      overflow:hidden;
+    }
+    .draw-strip-period{
+      flex:0 0 auto;
+      padding-right:12px;
+      border-right:1px solid #2a2d31;
+      display:flex;
+      flex-direction:column;
+      gap:5px;
+      white-space:nowrap;
+    }
+    .draw-strip-period>strong{
+      font-size:16px;
+      color:#f5f5f5;
+    }
+    .draw-strip-period span{
+      color:#bfc2c6;
+      font-size:12px;
+    }
+    .draw-strip-period b{
+      color:#ffd45b;
+      font-size:14px;
+    }
+    .draw-strip-result{
+      min-width:0;
+      flex:1;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .draw-strip-label{
+      color:#f4f4f4;
+      font-size:14px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+    .draw-strip-result .balls{
+      flex:1;
+      flex-wrap:nowrap;
+      gap:5px;
+      min-width:0;
+    }
+    .draw-strip-result .ball{
+      width:32px;
+      height:32px;
+      flex:0 0 32px;
+      font-size:13px;
+    }
+    .draw-strip-result .plus{
+      font-size:18px;
+      padding:0;
+    }
+    .draw-strip-history{
+      flex:0 0 auto;
+      color:var(--gold);
+      font-size:13px;
+      font-weight:800;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+
+    @media (max-width:520px){
+      .draw-strip{
+        padding:9px 8px;
+        gap:7px;
+      }
+      .draw-strip-period{
+        padding-right:7px;
+        gap:3px;
+      }
+      .draw-strip-period>strong{font-size:13px}
+      .draw-strip-period span{font-size:10px}
+      .draw-strip-period b{font-size:11px}
+      .draw-strip-label{font-size:12px}
+      .draw-strip-result{gap:5px}
+      .draw-strip-result .balls{gap:3px}
+      .draw-strip-result .ball{
+        width:27px;height:27px;flex-basis:27px;font-size:11px;
+      }
+      .draw-strip-result .plus{font-size:15px}
+      .draw-strip-history{font-size:11px}
+    }
+
+    @media (max-width:390px){
+      .draw-strip{gap:5px;padding:8px 6px}
+      .draw-strip-period{padding-right:5px}
+      .draw-strip-period>strong{font-size:12px}
+      .draw-strip-period span{font-size:9px}
+      .draw-strip-period b{font-size:10px}
+      .draw-strip-label{font-size:11px}
+      .draw-strip-result{gap:3px}
+      .draw-strip-result .balls{gap:2px}
+      .draw-strip-result .ball{
+        width:24px;height:24px;flex-basis:24px;font-size:10px;
+      }
+      .draw-strip-result .plus{font-size:13px}
+      .draw-strip-history{font-size:10px}
+    }
+
+  
+    .draw-box{
+      margin-bottom:10px;
+      padding:0 12px;
+      overflow:hidden;
+    }
+    .draw-box-top{
+      min-height:44px;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      border-bottom:1px solid #292c30;
+    }
+    .draw-period{
+      font-size:16px;
+      font-weight:900;
+      color:#f5f5f5;
+      white-space:nowrap;
+    }
+    .draw-countdown{
+      font-size:13px;
+      color:#c6c8cb;
+      white-space:nowrap;
+    }
+    .draw-countdown strong{
+      color:#ffd45b;
+      font-size:15px;
+      margin-left:3px;
+    }
+    .draw-history{
+      margin-left:auto;
+      color:var(--gold);
+      font-size:13px;
+      font-weight:800;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .draw-box-bottom{
+      min-height:58px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .draw-result-label{
+      flex:0 0 auto;
+      color:#f3f3f3;
+      font-size:15px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .draw-box-bottom .balls{
+      flex-wrap:nowrap;
+      gap:7px;
+      min-width:0;
+    }
+    .draw-box-bottom .ball{
+      width:34px;
+      height:34px;
+      flex:0 0 34px;
+      font-size:14px;
+    }
+
+    @media(max-width:520px){
+      .draw-box{padding:0 9px}
+      .draw-box-top{min-height:40px;gap:9px}
+      .draw-period{font-size:14px}
+      .draw-countdown{font-size:11px}
+      .draw-countdown strong{font-size:13px}
+      .draw-history{font-size:12px}
+      .draw-box-bottom{min-height:54px;gap:7px}
+      .draw-result-label{font-size:13px}
+      .draw-box-bottom .balls{gap:5px}
+      .draw-box-bottom .ball{
+        width:31px;height:31px;flex-basis:31px;font-size:12px;
+      }
+      .draw-box-bottom .plus{font-size:17px;padding:0}
+    }
+    @media(max-width:390px){
+      .draw-box{padding:0 7px}
+      .draw-box-top{gap:6px}
+      .draw-period{font-size:13px}
+      .draw-countdown{font-size:10px}
+      .draw-countdown strong{font-size:12px}
+      .draw-history{font-size:11px}
+      .draw-box-bottom{gap:5px}
+      .draw-result-label{font-size:12px}
+      .draw-box-bottom .balls{gap:3px}
+      .draw-box-bottom .ball{
+        width:28px;height:28px;flex-basis:28px;font-size:11px;
+      }
+      .draw-box-bottom .plus{font-size:15px}
+    }
+
+  
+    .draw-result-items{
+      flex:1;
+      display:flex;
+      align-items:flex-start;
+      gap:7px;
+      min-width:0;
+      flex-wrap:nowrap;
+    }
+    .draw-number{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      flex:0 0 auto;
+    }
+    .draw-number .zodiac{
+      color:#cfd2d6;
+      font-size:12px;
+      font-weight:700;
+      line-height:1;
+    }
+    .draw-number.special .zodiac{
+      color:#7eb0ff;
+    }
+    .draw-result-items .plus{
+      align-self:center;
+      margin-top:-15px;
+    }
+
+    @media(max-width:520px){
+      .draw-result-items{gap:5px}
+      .draw-number .zodiac{font-size:11px}
+      .draw-result-items .plus{margin-top:-13px}
+    }
+
+    @media(max-width:390px){
+      .draw-result-items{gap:3px}
+      .draw-number .zodiac{font-size:10px}
+      .draw-result-items .plus{margin-top:-12px}
+    }
+
+  
+    .draw-box-centered .draw-box-top{
+      position:relative;
+      justify-content:center;
+    }
+    .draw-box-centered .draw-period,
+    .draw-box-centered .draw-countdown{
+      text-align:center;
+    }
+    .draw-box-centered .draw-history{
+      position:absolute;
+      right:0;
+      margin-left:0;
+    }
+    .draw-box-bottom-centered{
+      min-height:82px;
+      flex-direction:column;
+      justify-content:center;
+      gap:7px;
+      padding:9px 0 10px;
+    }
+    .draw-result-heading{
+      color:#f3f3f3;
+      font-size:14px;
+      font-weight:800;
+      line-height:1;
+      text-align:center;
+    }
+    .draw-box-bottom-centered .draw-result-items{
+      flex:none;
+      justify-content:center;
+      width:100%;
+      gap:9px;
+    }
+    .draw-box-bottom-centered .draw-number .zodiac{
+      font-size:15px;
+      font-weight:900;
+      color:#f2d27d;
+      margin-top:1px;
+    }
+    .draw-box-bottom-centered .draw-number.special .zodiac{
+      color:#f2d27d;
+    }
+    .draw-box-bottom-centered .plus{
+      margin-top:3px;
+      align-self:flex-start;
+      padding-top:7px;
+    }
+
+    @media(max-width:520px){
+      .draw-box-bottom-centered{min-height:78px;gap:6px}
+      .draw-box-bottom-centered .draw-result-items{gap:6px}
+      .draw-box-bottom-centered .draw-number .zodiac{font-size:14px}
+    }
+    @media(max-width:390px){
+      .draw-box-centered .draw-box-top{justify-content:flex-start}
+      .draw-box-centered .draw-period{font-size:12px}
+      .draw-box-centered .draw-countdown{font-size:10px}
+      .draw-box-centered .draw-history{font-size:10px}
+      .draw-box-bottom-centered .draw-result-items{gap:4px}
+      .draw-box-bottom-centered .draw-number .zodiac{font-size:13px}
+    }
+
+  
+    .draw-style5{
+      display:grid;
+      grid-template-columns:24% 62% 14%;
+      min-height:126px;
+      margin-bottom:10px;
+      overflow:hidden;
+      border-color:#80661b;
+    }
+    .draw-style5-left,
+    .draw-style5-center,
+    .draw-style5-right{min-width:0}
+    .draw-style5-left{
+      padding:15px 14px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      border-right:1px solid #80661b;
+    }
+    .s5-period{
+      font-size:17px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+    .s5-label{
+      margin-top:12px;
+      color:#d6d6d6;
+      font-size:14px;
+    }
+    .s5-countdown{
+      margin-top:3px;
+      color:#ffd23f;
+      font-size:21px;
+      font-weight:900;
+      letter-spacing:.4px;
+    }
+    .draw-style5-center{
+      padding:11px 8px 9px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+    }
+    .s5-title{
+      width:100%;
+      text-align:center;
+      color:#f2c84c;
+      font-size:17px;
+      font-weight:900;
+      margin-bottom:9px;
+      position:relative;
+    }
+    .s5-title:before,.s5-title:after{
+      content:"";
+      position:absolute;
+      top:50%;
+      width:25%;
+      height:1px;
+      background:#80661b;
+    }
+    .s5-title:before{left:3%}
+    .s5-title:after{right:3%}
+    .draw-style5-center .draw-result-items{
+      width:100%;
+      justify-content:center;
+      gap:8px;
+    }
+    .draw-style5-center .draw-number .zodiac{
+      color:#f2d27d;
+      font-size:15px;
+      font-weight:900;
+    }
+    .draw-style5-center .draw-number.special .zodiac{color:#f2d27d}
+    .draw-style5-center .plus{
+      align-self:flex-start;
+      margin-top:8px;
+    }
+    .draw-style5-right{
+      border-left:1px solid #80661b;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      gap:14px;
+      padding:10px 6px;
+    }
+    .draw-style5-right a,
+    .draw-style5-right button{
+      color:var(--gold);
+      font-size:13px;
+      font-weight:800;
+      text-decoration:none;
+      white-space:nowrap;
+      background:none;
+      border:0;
+      padding:0;
+      cursor:pointer;
+      font-family:inherit;
+    }
+    .live-video-wrap{
+      grid-column:1/-1;
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:14px 12px 16px;
+      border-top:1px solid #80661b;
+      background:#090909;
+    }
+    .live-video-wrap[hidden]{display:none}
+    .live-video-wrap video{
+      display:block;
+      width:min(100%,760px);
+      aspect-ratio:16/9;
+      background:#000;
+      border-radius:10px;
+      border:1px solid #6d551f;
+    }
+    .live-close{align-self:flex-end;margin-bottom:10px;padding:6px 14px;border:1px solid #806428;border-radius:18px;background:#1d180d;color:#f1cc61;font:800 13px inherit;cursor:pointer}
+    .live-status{width:min(100%,760px);margin-top:10px;text-align:center;color:#cfcfcf;font-size:13px}
+
+    @media(max-width:520px){
+      .draw-style5{grid-template-columns:23% 63% 14%;min-height:116px}
+      .draw-style5-left{padding:11px 8px}
+      .s5-period{font-size:14px}
+      .s5-label{margin-top:8px;font-size:12px}
+      .s5-countdown{font-size:16px}
+      .draw-style5-center{padding:9px 5px 8px}
+      .s5-title{font-size:15px;margin-bottom:7px}
+      .draw-style5-center .draw-result-items{gap:5px}
+      .draw-style5-center .draw-number .zodiac{font-size:14px}
+      .draw-style5-right{gap:10px;padding:8px 3px}
+      .draw-style5-right a,
+      .draw-style5-right button{font-size:11px}
+    }
+    @media(max-width:390px){
+      .draw-style5{grid-template-columns:22% 64% 14%}
+      .draw-style5-left{padding:9px 5px}
+      .s5-period{font-size:12px}
+      .s5-label{font-size:10px}
+      .s5-countdown{font-size:14px}
+      .s5-title{font-size:14px}
+      .draw-style5-center .draw-result-items{gap:3px}
+      .draw-style5-center .draw-number .zodiac{font-size:13px}
+      .draw-style5-right a,
+      .draw-style5-right button{font-size:10px}
+    }
+
+  
+    /* Final phone-safe override: draw area only */
+    .draw-style5{
+      grid-template-columns:22% minmax(0,66%) 12%;
+    }
+    .draw-style5-center .draw-result-items{
+      display:flex;
+      flex-wrap:nowrap;
+      justify-content:center;
+      align-items:flex-start;
+      gap:clamp(2px,1vw,7px);
+      min-width:0;
+    }
+    .draw-style5-center .draw-number{
+      min-width:0;
+      flex:0 1 42px;
+    }
+    .draw-style5-center .draw-number .ball{
+      width:clamp(28px,7.6vw,38px);
+      height:clamp(28px,7.6vw,38px);
+      min-width:0;
+      flex-basis:auto;
+      font-size:clamp(12px,3.5vw,16px);
+    }
+    .draw-style5-center .draw-number .zodiac{
+      font-size:clamp(13px,3.8vw,17px);
+      white-space:nowrap;
+    }
+    .draw-style5-center .plus{
+      flex:0 0 auto;
+      margin:7px 0 0;
+      padding:0;
+      font-size:clamp(16px,4.5vw,22px);
+    }
+    .draw-style5-right a,
+    .draw-style5-right button{
+      white-space:normal;
+      text-align:center;
+      line-height:1.25;
+    }
+    @media(max-width:430px){
+      .draw-style5{
+        grid-template-columns:22% minmax(0,65%) 13%;
+      }
+      .draw-style5-left{padding:10px 5px}
+      .s5-period{font-size:12px}
+      .s5-label{font-size:10px;margin-top:8px}
+      .s5-countdown{font-size:15px}
+      .draw-style5-center{padding:9px 2px 8px}
+      .s5-title{font-size:14px;margin-bottom:7px}
+      .draw-style5-center .draw-result-items{gap:2px}
+      .draw-style5-right{padding:7px 2px;gap:10px}
+      .draw-style5-right a,
+      .draw-style5-right button{font-size:10px}
+    }
+
+  
+    /* ===== Full responsive hardening ===== */
+    html, body{
+      width:100%;
+      max-width:100%;
+      overflow-x:hidden;
+    }
+    .page{
+      width:100%;
+      max-width:760px;
+      min-width:0;
+    }
+    img, video, iframe{
+      max-width:100%;
+    }
+
+    /* Never allow grid/flex children to force horizontal overflow */
+    .topbar,
+    .draw-style5,
+    .draw-style5-left,
+    .draw-style5-center,
+    .draw-style5-right,
+    .section,
+    .grid-3,
+    .six-table,
+    .six-row,
+    .tail-grid,
+    .combo-grid,
+    .combo-card,
+    .idiom-grid,
+    .idiom{
+      min-width:0;
+      max-width:100%;
+    }
+
+    /* Main material grids: keep the approved 3-column look where possible */
+    .grid-3{
+      grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+    .material{
+      min-width:0;
+      overflow:hidden;
+    }
+    .material .name{
+      max-width:100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .material .pick{
+      max-width:100%;
+      overflow-wrap:anywhere;
+    }
+
+    /* Six-zodiac rows */
+    .six-row{
+      grid-template-columns:minmax(82px,1.05fr) minmax(0,2.5fr);
+    }
+    .six-row .name{
+      min-width:0;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .six-row .pick{
+      grid-template-columns:repeat(6,minmax(0,1fr));
+      min-width:0;
+    }
+
+    /* Featured 8-number rows */
+    .five-row{
+      grid-template-columns:minmax(50px,64px) minmax(0,1fr);
+    }
+    .numline{
+      grid-template-columns:repeat(8,minmax(0,1fr));
+      min-width:0;
+    }
+    .num{
+      width:100%;
+      min-width:0;
+      max-width:34px;
+    }
+
+    /* Tail / combo / idiom */
+    .tail-grid{
+      grid-template-columns:repeat(4,minmax(0,1fr));
+    }
+    .combo-grid,
+    .idiom-grid{
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    .combo-nums{
+      min-width:0;
+    }
+
+    /* Draw area: preserve Style 5, but scale safely */
+    .draw-style5{
+      width:100%;
+      grid-template-columns:minmax(72px,22%) minmax(0,65%) minmax(46px,13%);
+    }
+    .draw-style5-left{
+      min-width:0;
+    }
+    .s5-period,
+    .s5-label,
+    .s5-countdown{
+      max-width:100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .draw-style5-center{
+      min-width:0;
+      overflow:hidden;
+    }
+    .draw-style5-center .draw-result-items{
+      width:100%;
+      min-width:0;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      flex-wrap:nowrap;
+      gap:clamp(1px, .8vw, 7px);
+    }
+    .draw-style5-center .draw-number{
+      flex:1 1 0;
+      min-width:0;
+      max-width:42px;
+    }
+    .draw-style5-center .draw-number .ball{
+      width:clamp(24px,7vw,38px);
+      height:clamp(24px,7vw,38px);
+      max-width:100%;
+      aspect-ratio:1;
+      flex:none;
+      font-size:clamp(10px,3vw,16px);
+    }
+    .draw-style5-center .draw-number .zodiac{
+      font-size:clamp(12px,3.4vw,16px);
+      white-space:nowrap;
+      line-height:1.15;
+    }
+    .draw-style5-center .plus{
+      flex:0 0 auto;
+      font-size:clamp(14px,4vw,20px);
+      margin-top:6px;
+    }
+    .draw-style5-right{
+      min-width:0;
+      padding-inline:2px;
+    }
+    .draw-style5-right a,
+    .draw-style5-right button{
+      width:100%;
+      max-width:100%;
+      white-space:normal;
+      overflow-wrap:anywhere;
+      text-align:center;
+      font-size:clamp(9px,2.6vw,12px);
+      line-height:1.25;
+    }
+
+    /* 430 and below */
+    @media (max-width:430px){
+      .page{padding-left:7px;padding-right:7px}
+      .topbar{gap:8px}
+      .brand h1{font-size:27px}
+      .brand p{font-size:12px}
+      .brand-domain{font-size:11px;letter-spacing:1.8px}
+      .lottery-btn{height:38px;font-size:13px;padding:0 9px}
+
+      .draw-style5{
+        grid-template-columns:minmax(68px,21%) minmax(0,66%) minmax(44px,13%);
+      }
+      .draw-style5-left{padding:9px 4px}
+      .s5-period{font-size:12px}
+      .s5-label{font-size:10px;margin-top:7px}
+      .s5-countdown{font-size:14px}
+      .s5-title{font-size:14px}
+
+      .section{padding:8px 7px}
+      .section::after{margin-top:7px;padding-top:5px;font-size:9px;letter-spacing:1.3px}
+      .section-title h2{font-size:16px}
+      .count{font-size:11px}
+      .more{font-size:12px}
+      .material .name{font-size:11px}
+      .material .pick{font-size:20px}
+      .six-row .name{font-size:12px}
+      .six-row .pick{font-size:15px}
+    }
+
+    /* 375 and below: keep structure, reduce density */
+    @media (max-width:375px){
+      .brand-lockup{gap:4px}
+      .brand-mark{width:46px;height:36px;flex-basis:46px;font-size:19px}
+      .brand-title{font-size:22px;letter-spacing:0}
+      .brand-title em{margin-left:3px}
+      .brand-lockup .brand-domain{font-size:9px;letter-spacing:1.3px}
+      .brand h1{font-size:25px}
+      .lottery-btn{font-size:12px}
+
+      .draw-style5{
+        grid-template-columns:minmax(62px,20%) minmax(0,67%) minmax(42px,13%);
+      }
+      .draw-style5-left{padding:8px 3px}
+      .s5-period{font-size:11px}
+      .s5-label{font-size:9px}
+      .s5-countdown{font-size:13px}
+      .s5-title{font-size:13px;margin-bottom:5px}
+      .draw-style5-center{padding-left:1px;padding-right:1px}
+      .draw-style5-center .draw-result-items{gap:1px}
+      .draw-style5-right{gap:8px}
+
+      .material{padding-inline:3px}
+      .material .name{font-size:10.5px}
+      .material .pick{font-size:19px}
+
+      .tail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .combo-grid,.idiom-grid{grid-template-columns:1fr}
+    }
+
+    /* Very small phones: prevent any overlap, allow only approved content to reflow */
+    @media (max-width:340px){
+      .page{padding-left:5px;padding-right:5px}
+      .topbar{align-items:center}
+      .brand p{display:none}
+      .brand h1{font-size:23px}
+      .brand-domain{font-size:10px;letter-spacing:1.4px}
+      .lottery-btn{height:36px;font-size:11px;padding:0 7px}
+      .lottery-badge{width:22px;height:22px;font-size:12px}
+
+      .draw-style5{
+        grid-template-columns:minmax(58px,19%) minmax(0,67%) minmax(40px,14%);
+      }
+      .s5-period{font-size:10px}
+      .s5-countdown{font-size:12px}
+      .draw-style5-center .draw-number .ball{
+        width:22px;height:22px;font-size:9px;
+      }
+      .draw-style5-center .draw-number .zodiac{font-size:11px}
+      .draw-style5-right a,
+      .draw-style5-right button{font-size:8.5px}
+
+      .grid-3{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+      .material .name{font-size:11px}
+      .material .pick{font-size:20px}
+      .six-row{
+        grid-template-columns:minmax(72px,.95fr) minmax(0,2.6fr);
+      }
+      .six-row .pick{font-size:13px}
+      .five-row{grid-template-columns:46px minmax(0,1fr)}
+      .issue{font-size:12px;padding-left:4px}
+      .numline{gap:2px}
+      .num{font-size:10px}
+    }
+
+  .site-network{margin:0 0 10px;padding:10px}.site-network-head{margin-bottom:9px;color:#edcb69;font-size:17px;font-weight:900;text-align:center}.site-network-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.site-network-list a{min-width:0;padding:10px 5px;border:1px solid #3a3020;border-radius:8px;background:#0a0b0c;color:#f2d271;text-align:center;text-decoration:none;font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.site-network-list a:hover{border-color:#a78329;background:#211c0f}@media(max-width:520px){.site-network{padding:8px 6px}.site-network-list{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}.site-network-head{font-size:15px}.site-network-list a{padding:8px 2px;border-radius:5px;font-size:11px}}
+  .five-history-nav{display:flex;align-items:center;gap:6px;padding:9px 10px 10px;border-top:1px solid #302918;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
+    .five-history-nav::-webkit-scrollbar{display:none;width:0;height:0}
+    .five-history-nav button{flex:0 0 auto;scroll-snap-align:start;height:30px;padding:0 9px;border:1px solid #59491f;border-radius:7px;background:#15130e;color:#aaa;font-family:inherit;font-size:11px;font-weight:800;white-space:nowrap;cursor:pointer}
+    .five-history-nav button.active{border-color:#b28c25;background:linear-gradient(180deg,#34290c,#201907);color:#f5c84b;box-shadow:inset 0 0 0 1px rgba(245,200,75,.08)}
+    .five-result{grid-column:2;justify-self:end;padding:0 6px 6px;font-size:12px;color:#aaa}
+    .five-result strong{margin-left:5px;font-size:13px}.five-result .win{color:#65db87}.five-result .lose{color:#ef6464}
+  </style>
+  <style>
+    /* 传统彩票论坛列表：紧凑、信息密度高，取消独立卡片感 */
+    .section .grid-3{display:block;padding:0;border-top:1px solid #30291d}
+    .section .grid-3 .material{min-height:60px;display:grid;grid-template-columns:1fr;align-items:center;gap:5px;padding:8px 13px;border:0;border-bottom:1px solid #29251d;border-radius:0;background:#0c0d0e;text-align:center}
+    .section .grid-3 .material:last-child{border-bottom:0}
+    .section .grid-3 .material:nth-child(even){background:#101112}
+    .section .grid-3 .material .name{margin:0;color:#f0cf69;font-size:15px;font-weight:800;text-align:center;white-space:normal;overflow-wrap:anywhere}
+    .section .grid-3 .material .pick{margin:0;font-size:19px;line-height:1.2;text-align:center;white-space:nowrap}
+    .section .title-only{min-height:48px!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:9px 10px!important;text-align:center!important}
+    .section .title-only>:not(.name):not(.title):not(strong){display:none!important}
+    .section .title-only .name,.section .title-only .title,.section .title-only>strong{width:100%;margin:0!important;color:#f0cf69!important;font-size:15px!important;font-weight:800!important;line-height:1.45!important;text-align:center!important;white-space:normal!important;overflow-wrap:anywhere}
+    .materials-booting .section:not(.five-panel) .grid-3,.materials-booting .section:not(.five-panel) .six-table,.materials-booting .section:not(.five-panel) .tail-grid,.materials-booting .section:not(.five-panel) .combo-grid,.materials-booting .section:not(.five-panel) .idiom-grid{visibility:hidden}
+    .homepage-material-loading{padding:16px 10px;text-align:center;color:#8f8f8f;font-size:13px;font-weight:700}
+    .section-title.featured-heading{justify-content:center;text-align:center}
+    .section-title.featured-heading .left{width:100%;justify-content:center}
+    .section-title.featured-heading h2{color:#ff5050;font-size:20px;letter-spacing:1px;text-align:center}
+    .section-title.featured-heading .more{display:none}
+    @media(max-width:430px){.section .grid-3 .material{min-height:56px;padding:7px 8px}.section .grid-3 .material .name{font-size:13px}.section .grid-3 .material .pick{font-size:17px}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-lockup" aria-label="一路发平特 168PT.COM">
+          <span class="brand-mark" aria-hidden="true"><b>168</b></span>
+          <span class="brand-copy">
+            <span class="brand-title"><b>一路发</b><em>平特</em></span>
+            <span class="brand-domain">168PT.COM</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="lottery-switch">
+        <button class="lottery-btn" id="lotteryBtn">
+          <span id="lotteryText">澳门六合彩</span>
+          <span class="lottery-chevron" aria-hidden="true"></span>
+        </button>
+        <div class="lottery-menu" id="lotteryMenu">
+          <button data-name="香港六合彩" data-lottery-type="1">香港六合彩</button>
+          <button data-name="澳门六合彩" data-lottery-type="5">澳门六合彩</button>
+          <button data-name="天天六合彩" data-lottery-type="8">天天六合彩</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="card draw-style5">
+      <div class="draw-style5-left">
+        <div class="s5-period">第---期</div>
+        <div class="s5-label">距开奖</div>
+        <div class="s5-countdown" id="countdown">02:18:36</div>
+      </div>
+
+      <div class="draw-style5-center">
+        <div class="s5-title">第---期开奖结果</div>
+        <div class="draw-result-items">
+          <div class="draw-number"><span class="ball">01</span><span class="zodiac">马</span></div>
+          <div class="draw-number"><span class="ball">18</span><span class="zodiac">牛</span></div>
+          <div class="draw-number"><span class="ball">23</span><span class="zodiac">猴</span></div>
+          <div class="draw-number"><span class="ball">36</span><span class="zodiac">羊</span></div>
+          <div class="draw-number"><span class="ball">42</span><span class="zodiac">牛</span></div>
+          <div class="draw-number"><span class="ball">07</span><span class="zodiac">鼠</span></div>
+          <span class="plus">+</span>
+          <div class="draw-number special"><span class="ball blue">16</span><span class="zodiac">兔</span></div>
+        </div>
+
+      </div>
+
+      <div class="draw-style5-right">
+        <a href="history.html">历史记录</a>
+        <button type="button" id="liveToggle">开奖直播</button>
+        <a href="chat.html">在线聊天</a>
+      </div>
+      <div class="live-video-wrap" id="liveVideoWrap" hidden>
+        <button type="button" class="live-close" id="liveClose">收起直播</button>
+        <video id="liveVideo" controls playsinline preload="none"></video>
+        <div class="live-status" id="liveStatus">澳门六合彩攪珠直播開播時間為開獎日晚上21:30-21:38（北京時間），敬請查看</div>
+      </div>
+    </section>
+
+    <nav class="card site-network" aria-label="连准网站推荐">
+      <div class="site-network-head" id="siteNetworkTitle">↓↓★★★澳门连准网站推荐★★★↓↓</div>
+      <div class="site-network-list" id="siteNetworkList">
+        <a href="https://123lh.668870.cc/" target="_blank" rel="noopener">123六合网</a>
+        <a href="https://lhw.235-from.com/" target="_blank" rel="noopener">六合王</a>
+      </div>
+    </nav>
+
+    <section class="card section">
+      <div class="section-title featured-heading">
+        <div class="left">
+          <h2 class="c-red">★推荐★平特一肖ＰＫ赛★</h2>
+        </div>
+        <a class="more" href="yixiao.html" aria-hidden="true" tabindex="-1">查看更多</a>
+      </div>
+      <div class="grid-3">
+        <div class="material"><div class="name">财神点金</div><div class="pick c-red">龙</div></div>
+        <div class="material"><div class="name">老张密报</div><div class="pick c-red">猴</div></div>
+        <div class="material"><div class="name">阿旺心水</div><div class="pick c-red">牛</div></div>
+        <div class="material"><div class="name">福叔手记</div><div class="pick c-red">马</div></div>
+        <div class="material"><div class="name">金库密笺</div><div class="pick c-red">虎</div></div>
+        <div class="material"><div class="name">顺风快讯</div><div class="pick c-red">狗</div></div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <div class="section-title featured-heading">
+        <div class="left">
+          <h2>全网最准确【平特二肖】期期大公开</h2>
+        </div>
+        <a class="more" href="erxiao.html" aria-hidden="true" tabindex="-1">查看更多</a>
+      </div>
+      <div class="grid-3">
+        <div class="material"><div class="name">桥头阿伯</div><div class="pick c-purple">龙 猴</div></div>
+        <div class="material"><div class="name">南门老李</div><div class="pick c-purple">牛 狗</div></div>
+        <div class="material"><div class="name">祥记档案</div><div class="pick c-purple">虎 马</div></div>
+        <div class="material"><div class="name">春风茶馆</div><div class="pick c-purple">猴 鸡</div></div>
+        <div class="material"><div class="name">鸿运阿成</div><div class="pick c-purple">兔 羊</div></div>
+        <div class="material"><div class="name">德叔笔记</div><div class="pick c-purple">狗 龙</div></div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <div class="section-title">
+        <div class="left">
+          <span class="fire">🔥</span>
+          <h2 class="c-orange">平特三肖</h2>
+        </div>
+        <a class="more" href="sanxiao.html">查看更多</a>
+      </div>
+      <div class="grid-3">
+        <div class="material"><div class="name">东叔茶话</div><div class="pick c-orange">龙 猴 狗</div></div>
+        <div class="material"><div class="name">阿海手札</div><div class="pick c-orange">牛 狗 虎</div></div>
+        <div class="material"><div class="name">老钟秘笈</div><div class="pick c-orange">虎 马 羊</div></div>
+        <div class="material"><div class="name">福来小站</div><div class="pick c-orange">猴 鸡 狗</div></div>
+        <div class="material"><div class="name">大胜参考</div><div class="pick c-orange">龙 鸡 蛇</div></div>
+        <div class="material"><div class="name">九记快报</div><div class="pick c-orange">狗 龙 蛇</div></div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <div class="section-title">
+        <div class="left">
+          <span class="fire c-green">🔥</span>
+          <h2 class="c-green">平特六肖</h2>
+        </div>
+        <a class="more" href="liuxiao.html">查看更多</a>
+      </div>
+      <div class="six-table">
+        <div class="six-row"><div class="name">富贵人家</div><div class="pick"><span>龙</span><span>猴</span><span>狗</span><span>虎</span><span>马</span><span>牛</span></div></div>
+        <div class="six-row"><div class="name">长乐坊</div><div class="pick"><span>牛</span><span>狗</span><span>虎</span><span>马</span><span>羊</span><span>猪</span></div></div>
+        <div class="six-row"><div class="name">顺景楼</div><div class="pick"><span>虎</span><span>马</span><span>羊</span><span>猪</span><span>兔</span><span>鸡</span></div></div>
+        <div class="six-row"><div class="name">金玉堂</div><div class="pick"><span>龙</span><span>兔</span><span>猴</span><span>狗</span><span>羊</span><span>牛</span></div></div>
+        <div class="six-row"><div class="name">白小姐六肖</div><div class="pick"><span>虎</span><span>龙</span><span>狗</span><span>牛</span><span>马</span><span>猪</span></div></div>
+      </div>
+    </section>
+
+    <section class="card section five-panel">
+      <div class="section-title">
+        <div class="left">
+          <span>✿</span>
+          <h2 class="five-title">五期必中·特码</h2>
+          <span class="count">（精选8码）</span>
+        </div>
+      </div>
+      <div class="five-grid" id="fiveHistoryGrid">
+        <div class="five-row">
+          <div class="issue">090期</div>
+          <div class="numline">
+            <span class="num">04</span><span class="num">08</span><span class="num">13</span><span class="num">20</span>
+            <span class="num">21</span><span class="num">30</span><span class="num">32</span><span class="num">47</span>
+          </div><div class="five-result">开奖特码 39<strong class="lose">未中</strong></div>
+        </div>
+        <div class="five-row">
+          <div class="issue">089期</div>
+          <div class="numline">
+            <span class="num">04</span><span class="num">08</span><span class="num">13</span><span class="num">20</span>
+            <span class="num">21</span><span class="num">30</span><span class="num">32</span><span class="num">47</span>
+          </div><div class="five-result">开奖特码 45<strong class="lose">未中</strong></div>
+        </div>
+        <div class="five-row">
+          <div class="issue">088期</div>
+          <div class="numline">
+            <span class="num">04</span><span class="num">08</span><span class="num">13</span><span class="num">20</span>
+            <span class="num">21</span><span class="num">30</span><span class="num">32</span><span class="num">47</span>
+          </div><div class="five-result">开奖特码 06<strong class="lose">未中</strong></div>
+        </div>
+        <div class="five-row">
+          <div class="issue">087期</div>
+          <div class="numline">
+            <span class="num">04</span><span class="num">08</span><span class="num hit">13</span><span class="num">20</span>
+            <span class="num">21</span><span class="num">30</span><span class="num">32</span><span class="num">47</span>
+          </div><div class="five-result">开奖特码 13<strong class="win">命中</strong></div>
+        </div>
+        <div class="five-row">
+          <div class="issue">086期</div>
+          <div class="numline">
+            <span class="num">04</span><span class="num">08</span><span class="num">13</span><span class="num">20</span>
+            <span class="num">21</span><span class="num">30</span><span class="num">32</span><span class="num hit">47</span>
+          </div><div class="five-result">开奖特码 47<strong class="win">命中</strong></div>
+        </div>
+      </div>
+      <div class="five-history-nav"><button class="active" type="button" id="fiveBatchLatest">090–086期</button><button type="button" id="fiveBatchOlder">085–081期</button></div>
+    </section>
+
+    <section class="card section">
+      <div class="section-title featured-heading">
+        <div class="left">
+          <h2>全网最准确【平特尾数】期期大公开</h2>
+        </div>
+        <a class="more" href="weishu.html" aria-hidden="true" tabindex="-1">查看更多</a>
+      </div>
+      <div class="tail-grid">
+        <div class="tail"><div class="name">尾数老王</div><div class="value">2尾 · 6尾</div></div>
+        <div class="tail"><div class="name">阿城看尾</div><div class="value">1尾 · 7尾</div></div>
+        <div class="tail"><div class="name">老莫尾数</div><div class="value">3尾 · 8尾</div></div>
+        <div class="tail"><div class="name">白小姐平特尾数</div><div class="value">0尾 · 5尾</div></div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <div class="section-title featured-heading">
+        <div class="left">
+          <h2>全网最准确【三中三】期期大公开</h2>
+        </div>
+        <a class="more" href="sanzhongsan.html" aria-hidden="true" tabindex="-1">查看更多</a>
+      </div>
+      <div class="combo-grid">
+        <div class="combo-card">
+          <div class="combo-head"><strong>老兵看盘</strong><span class="chip c-cyan">共18码</span></div>
+          <div class="combo-nums">
+            <span class="combo-num">01</span><span class="combo-num">03</span><span class="combo-num">06</span><span class="combo-num">08</span>
+            <span class="combo-num">11</span><span class="combo-num">13</span><span class="combo-num">17</span><span class="combo-num">19</span>
+            <span class="combo-num">22</span><span class="combo-num">26</span><span class="combo-num">28</span><span class="combo-num">31</span>
+            <span class="combo-num">33</span><span class="combo-num">36</span><span class="combo-num">42</span><span class="combo-num">45</span>
+            <span class="combo-num">48</span><span class="combo-num">49</span>
+          </div>
+        </div>
+        <div class="combo-card">
+          <div class="combo-head"><strong>阿泰精选</strong><span class="chip c-cyan">共19码</span></div>
+          <div class="combo-nums">
+            <span class="combo-num">02</span><span class="combo-num">05</span><span class="combo-num">07</span><span class="combo-num">10</span>
+            <span class="combo-num">12</span><span class="combo-num">15</span><span class="combo-num">18</span><span class="combo-num">21</span>
+            <span class="combo-num">23</span><span class="combo-num">27</span><span class="combo-num">29</span><span class="combo-num">32</span>
+            <span class="combo-num">34</span><span class="combo-num">37</span><span class="combo-num">38</span><span class="combo-num">41</span>
+            <span class="combo-num">44</span><span class="combo-num">46</span><span class="combo-num">49</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <div class="section-title featured-heading">
+        <div class="left">
+          <h2>全网最准确【二中二】期期大公开</h2>
+        </div>
+        <a class="more" href="erzhonger.html" aria-hidden="true" tabindex="-1">查看更多</a>
+      </div>
+      <div class="combo-grid">
+        <div class="combo-card yellow">
+          <div class="combo-head"><strong>老吴看号</strong><span class="chip c-yellow">共23码</span></div>
+          <div class="combo-nums">
+            <span class="combo-num">01</span><span class="combo-num">08</span><span class="combo-num">13</span><span class="combo-num">15</span>
+            <span class="combo-num">18</span><span class="combo-num">20</span><span class="combo-num">22</span><span class="combo-num">24</span>
+            <span class="combo-num">26</span><span class="combo-num">28</span><span class="combo-num">30</span><span class="combo-num">33</span>
+            <span class="combo-num">35</span><span class="combo-num">36</span><span class="combo-num">38</span><span class="combo-num">41</span>
+            <span class="combo-num">43</span><span class="combo-num">46</span><span class="combo-num">48</span><span class="combo-num">49</span>
+          </div>
+        </div>
+        <div class="combo-card yellow">
+          <div class="combo-head"><strong>阿森精选</strong><span class="chip c-yellow">共21码</span></div>
+          <div class="combo-nums">
+            <span class="combo-num">02</span><span class="combo-num">16</span><span class="combo-num">24</span><span class="combo-num">42</span>
+            <span class="combo-num">21</span><span class="combo-num">23</span><span class="combo-num">25</span><span class="combo-num">27</span>
+            <span class="combo-num">29</span><span class="combo-num">31</span><span class="combo-num">33</span><span class="combo-num">39</span>
+            <span class="combo-num">42</span><span class="combo-num">45</span><span class="combo-num">47</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section">
+      <div class="section-title featured-heading">
+        <div class="left">
+          <h2>全网最准确【成语解肖】期期大公开</h2>
+        </div>
+        <a class="more" href="chengyu.html" aria-hidden="true" tabindex="-1">查看更多</a>
+      </div>
+      <div class="idiom-grid">
+        <div class="idiom">
+          <span class="period-tag">第108期</span>
+          <div class="title">守株待兔</div>
+          <div class="line">解肖：兔</div>
+          <div class="line green">推荐生肖：兔</div>
+        </div>
+        <div class="idiom">
+          <span class="period-tag">第107期</span>
+          <div class="title">龙腾虎跃</div>
+          <div class="line">解肖：龙、虎、马</div>
+          <div class="line green">推荐生肖：龙 虎 马</div>
+        </div>
+        <div class="idiom">
+          <span class="period-tag">第106期</span>
+          <div class="title">鸡鸣狗盗</div>
+          <div class="line">解肖：鸡、狗</div>
+          <div class="line green">推荐生肖：鸡 狗</div>
+        </div>
+        <div class="idiom">
+          <span class="period-tag">第105期</span>
+          <div class="title">画蛇添足</div>
+          <div class="line">解肖：蛇</div>
+          <div class="line green">推荐生肖：蛇</div>
+        </div>
+      </div>
+    </section>
+
+    <div id="history" style="height:1px"></div>
+  </main>
+
+  <script src="vendor/flv.min.js?v=1.6.2"></script>
+  <script>
+    const btn = document.getElementById('lotteryBtn');
+    const menu = document.getElementById('lotteryMenu');
+    const text = document.getElementById('lotteryText');
+
+    btn.addEventListener('click', () => menu.classList.toggle('open'));
+
+    document.querySelectorAll('#lotteryMenu button').forEach(item => {
+      item.addEventListener('click', () => {
+        text.textContent = item.dataset.name;
+        menu.classList.remove('open');
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.lottery-switch')) menu.classList.remove('open');
+    });
+
+    let seconds = 2 * 3600 + 18 * 60 + 36;
+    const cd = document.getElementById('countdown');
+
+    function renderCountdown(){
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = seconds % 60;
+      cd.textContent = [h,m,s].map(v => String(v).padStart(2,'0')).join(':');
+      if (seconds > 0) seconds--;
+    }
+    renderCountdown();
+    const fallbackCountdownTimer = setInterval(renderCountdown, 1000);
+  
+    const liveToggle = document.getElementById('liveToggle');
+    const liveVideoWrap = document.getElementById('liveVideoWrap');
+    const liveVideo = document.getElementById('liveVideo');
+    const liveClose = document.getElementById('liveClose');
+    const liveStatus = document.getElementById('liveStatus');
+    let liveStreamUrl = '';
+    let liveDrawDate = '';
+    let livePlayer = null;
+    const liveNames={1:'香港',5:'澳门',8:'天天'};
+    function liveNotice(){return (liveNames[activeLotteryType]||'香港')+'六合彩攪珠直播開播時間為開獎日晚上21:30-21:38（北京時間），敬請查看';}
+    function inLiveWindow(){
+      const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+      const hour=Number(parts.find(item=>item.type==='hour')?.value||0);const minute=Number(parts.find(item=>item.type==='minute')?.value||0);const total=hour*60+minute;
+      return total>=21*60+30&&total<21*60+39;
+    }
+    function stopLive(){
+      if(livePlayer){try{livePlayer.pause();livePlayer.unload();livePlayer.detachMediaElement();livePlayer.destroy();}catch(_){}livePlayer=null;}
+      if(liveVideo){liveVideo.pause();liveVideo.removeAttribute('src');liveVideo.load();}
+    }
+    function closeLive(){stopLive();liveVideoWrap.setAttribute('hidden','');liveToggle.textContent='开奖直播';}
+    function openLive(){liveVideoWrap.removeAttribute('hidden');liveToggle.textContent='收起直播';playLive();}
+    function liveDateKey(){
+      const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+      const value=Object.fromEntries(parts.map(item=>[item.type,item.value]));return value.year+'-'+value.month+'-'+value.day;
+    }
+    function isLiveDrawDay(){return /^\d{4}-\d{2}-\d{2}$/.test(liveDrawDate)&&liveDrawDate===liveDateKey();}
+    function maybeAutoOpenLive(){
+      if(!isLiveDrawDay()||!inLiveWindow()||!liveVideoWrap.hasAttribute('hidden'))return;
+      const key='live-auto-opened:'+activeLotteryType+':'+liveDateKey();
+      if(sessionStorage.getItem(key))return;
+      sessionStorage.setItem(key,'1');openLive();
+    }
+    function playLive(){
+      stopLive();
+      if(!inLiveWindow()){liveStatus.textContent=liveNotice();return;}
+      if(!liveStreamUrl){liveStatus.textContent=liveNotice();return;}
+      liveStatus.textContent='正在连接直播…';
+      if(liveVideo.canPlayType('application/vnd.apple.mpegurl')){
+        liveVideo.src=liveStreamUrl.replace(/\.flv(?:\?.*)?$/i,'.m3u8');
+        liveVideo.play().then(()=>liveStatus.textContent='直播播放中').catch(()=>liveStatus.textContent='点击播放器上的播放按钮开始观看');
+        return;
+      }
+      if(window.flvjs&&flvjs.isSupported()){
+        livePlayer=flvjs.createPlayer({type:'flv',url:liveStreamUrl,isLive:true,hasAudio:true,hasVideo:true},{enableStashBuffer:false,stashInitialSize:128});
+        livePlayer.attachMediaElement(liveVideo);livePlayer.load();
+        livePlayer.on(flvjs.Events.ERROR,()=>{liveStatus.textContent=liveNotice();});
+        liveVideo.play().then(()=>liveStatus.textContent='直播播放中').catch(()=>liveStatus.textContent='点击播放器上的播放按钮开始观看');
+      }else liveStatus.textContent='当前浏览器不支持此直播格式，请使用最新版 Chrome';
+    }
+    if (liveToggle && liveVideoWrap) {
+      liveToggle.addEventListener('click', () => {
+        const isHidden = liveVideoWrap.hasAttribute('hidden');
+        if (isHidden) openLive(); else closeLive();
+      });
+      liveClose.addEventListener('click',closeLive);
+      liveVideoWrap.addEventListener('click',event=>{if(event.target===liveVideoWrap)closeLive();});
+      document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!liveVideoWrap.hasAttribute('hidden'))closeLive();});
+    }
+
+    const lotteryApiBase = 'https://6htv70.com/gallerynew/h5/index/lastLotteryRecord?lotteryType=';
+    let activeLotteryType = 5;
+    let nextDrawAt = null;
+    let apiCountdownTimer = null;
+    let apiRefreshTimer = null;
+    let apiFastRefresh = false;
+    const historyLink = document.querySelector('a[href="history.html"]');
+    const apiPeriodNode = document.querySelector('.s5-period');
+    const apiResultTitleNode = document.querySelector('.s5-title');
+    const apiDrawNodes = [...document.querySelectorAll('.draw-style5-center .draw-number')];
+
+    function parseApiNextTime(title) {
+      const match = String(title || '').match(/(\d{4})\/(\d{1,2})\/(\d{1,2}).*?(\d{1,2})点(\d{1,2})分/);
+      if (!match) return null;
+      const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]), Number(match[4]), Number(match[5]), 0);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+
+    function renderApiCountdown() {
+      if (!nextDrawAt) return;
+      const total = Math.max(0, Math.floor((nextDrawAt.getTime() - Date.now()) / 1000));
+      const h = String(Math.floor(total / 3600)).padStart(2, '0');
+      const m = String(Math.floor((total % 3600) / 60)).padStart(2, '0');
+      const s = String(total % 60).padStart(2, '0');
+      cd.textContent = h + ':' + m + ':' + s;
+    }
+
+    function renderApiLottery(data) {
+      if (!data || !Array.isArray(data.numberList) || data.numberList.length < 7) return false;
+      liveStreamUrl=String(data.videoUrlForH5||'');
+      liveDrawDate=String(data.nextLotteryTime||'').slice(0,10);
+      clearInterval(fallbackCountdownTimer);
+      const currentPeriod = String(data.period || data.intPeriod || '').replace(/^0+(?=\d)/, '');
+      const nextPeriod = String(data.nextLotteryNumber || data.nextIntLotteryNumber || (Number(currentPeriod) + 1)).replace(/^0+(?=\d)/, '');
+      apiPeriodNode.textContent = '第' + nextPeriod + '期';
+      if (apiResultTitleNode) apiResultTitleNode.textContent = '第' + currentPeriod + '期开奖结果';
+      data.numberList.slice(0, 7).forEach((item, index) => {
+        const node = apiDrawNodes[index];
+        if (!node) return;
+        const ball = node.querySelector('.ball');
+        const rawNumber = String(item.number ?? '').trim();
+        ball.textContent = /^\d{1,2}$/.test(rawNumber) ? rawNumber.padStart(2, '0') : rawNumber;
+        node.querySelector('.zodiac').textContent = item.shengXiao || '-';
+        const color = Number(item.color);
+        ball.style.background = color === 1 ? 'linear-gradient(180deg,#ef3737,#c91717)' : color === 2 ? 'linear-gradient(180deg,#3479ff,#114dcc)' : 'linear-gradient(180deg,#32aa59,#187438)';
+      });
+      nextDrawAt = parseApiNextTime(data.title);
+      clearInterval(apiCountdownTimer);
+      if (nextDrawAt) {
+        renderApiCountdown();
+        apiCountdownTimer = setInterval(renderApiCountdown, 1000);
+      }
+      maybeAutoOpenLive();
+      return true;
+    }
+
+    async function loadApiLottery(type = activeLotteryType) {
+      try {
+        const response = await fetch(lotteryApiBase + encodeURIComponent(type), {cache:'no-store',mode:'cors'});
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const payload = await response.json();
+        if (!payload || payload.code !== 10000 || !payload.data) throw new Error('Invalid API response');
+        if (type !== activeLotteryType) return;
+        const liveItems = Array.isArray(payload.data.numberList) ? payload.data.numberList.slice(0, 7) : [];
+        apiFastRefresh = inLiveWindow() || liveItems.length < 7 || liveItems.some(item => !/^\d{1,2}$/.test(String(item.number ?? '').trim()));
+        renderApiLottery(payload.data);
+        clearTimeout(apiRefreshTimer);
+        const seconds = apiFastRefresh ? 2 : Math.max(15, Number(payload.data.interval) || 60);
+        apiRefreshTimer = setTimeout(() => loadApiLottery(activeLotteryType), seconds * 1000);
+      } catch (_) {
+        clearTimeout(apiRefreshTimer);
+        apiRefreshTimer = setTimeout(() => loadApiLottery(activeLotteryType), apiFastRefresh ? 2000 : 15000);
+      }
+    }
+
+    document.querySelectorAll('#lotteryMenu button').forEach(item => {
+      item.addEventListener('click', () => {
+        activeLotteryType = Number(item.dataset.lotteryType) || 1;
+        localStorage.setItem('lotteryType', String(activeLotteryType));
+        if (historyLink) historyLink.href = 'history.html?lotteryType=' + activeLotteryType;
+        clearTimeout(apiRefreshTimer);
+        loadApiLottery(activeLotteryType);
+        if(liveStatus)liveStatus.textContent=liveNotice();
+        if(!liveVideoWrap.hasAttribute('hidden'))playLive();
+        maybeAutoOpenLive();
+      });
+    });
+    localStorage.setItem('lotteryType', '5');
+    if (historyLink) historyLink.href = 'history.html?lotteryType=5';
+    loadApiLottery(5);
+    maybeAutoOpenLive();
+    setInterval(maybeAutoOpenLive,10000);
+
+    const fiveHistoryGrid = document.getElementById('fiveHistoryGrid');
+    const fiveBatchLatest = document.getElementById('fiveBatchLatest');
+    const fiveBatchOlder = document.getElementById('fiveBatchOlder');
+    if (fiveHistoryGrid && fiveBatchLatest && fiveBatchOlder) {
+      const fivePages = [fiveHistoryGrid.innerHTML, "<div class=\"five-row\"><div class=\"issue\">085期</div><div class=\"numline\"><span class=\"num\">02</span><span class=\"num\">07</span><span class=\"num\">11</span><span class=\"num\">18</span><span class=\"num\">25</span><span class=\"num\">33</span><span class=\"num\">41</span><span class=\"num\">48</span></div><div class=\"five-result\">开奖特码 39<strong class=\"lose\">未中</strong></div></div><div class=\"five-row\"><div class=\"issue\">084期</div><div class=\"numline\"><span class=\"num\">02</span><span class=\"num\">07</span><span class=\"num\">11</span><span class=\"num\">18</span><span class=\"num hit\">25</span><span class=\"num\">33</span><span class=\"num\">41</span><span class=\"num\">48</span></div><div class=\"five-result\">开奖特码 25<strong class=\"win\">命中</strong></div></div><div class=\"five-row\"><div class=\"issue\">083期</div><div class=\"numline\"><span class=\"num\">02</span><span class=\"num\">07</span><span class=\"num\">11</span><span class=\"num\">18</span><span class=\"num\">25</span><span class=\"num\">33</span><span class=\"num\">41</span><span class=\"num\">48</span></div><div class=\"five-result\">开奖特码 06<strong class=\"lose\">未中</strong></div></div><div class=\"five-row\"><div class=\"issue\">082期</div><div class=\"numline\"><span class=\"num\">02</span><span class=\"num\">07</span><span class=\"num\">11</span><span class=\"num\">18</span><span class=\"num\">25</span><span class=\"num\">33</span><span class=\"num\">41</span><span class=\"num hit\">48</span></div><div class=\"five-result\">开奖特码 48<strong class=\"win\">命中</strong></div></div><div class=\"five-row\"><div class=\"issue\">081期</div><div class=\"numline\"><span class=\"num\">02</span><span class=\"num\">07</span><span class=\"num\">11</span><span class=\"num\">18</span><span class=\"num\">25</span><span class=\"num\">33</span><span class=\"num\">41</span><span class=\"num\">48</span></div><div class=\"five-result\">开奖特码 44<strong class=\"lose\">未中</strong></div></div>"];
+      const renderFiveBatch = (page) => {
+        fiveHistoryGrid.innerHTML = fivePages[page];
+        fiveBatchLatest.classList.toggle('active', page === 0);
+        fiveBatchOlder.classList.toggle('active', page === 1);
+      };
+      fiveBatchLatest.addEventListener('click', () => renderFiveBatch(0));
+      fiveBatchOlder.addEventListener('click', () => renderFiveBatch(1));
+    }
+
+  </script>
+<script src="site-sync.js?v=82"></script><script src="/assets/cnzz-stat.js"></script></body>
+</html>
