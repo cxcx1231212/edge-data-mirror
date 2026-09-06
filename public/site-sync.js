@@ -159,7 +159,7 @@
       card.style.cursor='pointer';card.setAttribute('role','link');card.tabIndex=0;card.setAttribute('aria-label','查看 '+record.source_name+' 往期记录');
       card.onclick=event=>{if(event.target.closest('a,button'))return;location.href=detailUrl;};
       card.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();location.href=detailUrl;}};
-      if (nameNode){const author=section==='yixiao'?fourCharAuthor(record.source_name):record.source_name;nameNode.textContent=record.period+'期: '+author+'→【'+(categoryNames[section]||section)+'】+'】';}
+      if (nameNode){const author=section==='yixiao'?fourCharAuthor(record.source_name):record.source_name;nameNode.textContent=record.period+'期: '+author+'→【'+(categoryNames[section]||section)+'】';}
       if(section==='chengyu'){
         const periodTag=card.querySelector('.period-tag'); if(periodTag) periodTag.textContent='第'+record.period+'期';
         const lines=card.querySelectorAll('.line');
