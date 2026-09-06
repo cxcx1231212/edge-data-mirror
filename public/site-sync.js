@@ -1,4 +1,4 @@
-+'】'(function () {
+(function () {
   'use strict';
   const validTypes = [1, 5, 8];
   const sectionKeys = ['history','yixiao','erxiao','sanxiao','liuxiao','tema','weishu','sanzhongsan','erzhonger','chengyu'];
