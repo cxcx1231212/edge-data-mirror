@@ -50,6 +50,12 @@
     const rateA=settledA?hitsA/settledA:-1,rateB=settledB?hitsB/settledB:-1;
     return rateB-rateA||settledB-settledA||hitsB-hitsA||String(nameA).localeCompare(String(nameB),'zh-CN');
   };
+  const historyHitLabel=(stats,sourceName)=>{
+    const stat=stats&&stats[sourceName]||{};
+    const settled=Math.max(0,Number(stat.settled)||0);
+    const hits=Math.max(0,Number(stat.hits)||0);
+    return settled?'【'+settled+'期中'+hits+'期】':'';
+  };
   const setTokens = (node, content, className) => {
     if (!node) return;
     node.textContent = '';
@@ -159,7 +165,7 @@
       card.style.cursor='pointer';card.setAttribute('role','link');card.tabIndex=0;card.setAttribute('aria-label','查看 '+record.source_name+' 往期记录');
       card.onclick=event=>{if(event.target.closest('a,button'))return;location.href=detailUrl;};
       card.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();location.href=detailUrl;}};
-      if (nameNode){const author=section==='yixiao'?fourCharAuthor(record.source_name):record.source_name;nameNode.textContent=record.period+'期: '+author+'→【'+(categoryNames[section]||section)+'】';}
+      if (nameNode){const author=section==='yixiao'?fourCharAuthor(record.source_name):record.source_name;nameNode.textContent=record.period+'期: '+author+'→【'+(categoryNames[section]||section)+'】'+historyHitLabel(data.stats,record.source_name);}
       if(section==='chengyu'){
         const periodTag=card.querySelector('.period-tag'); if(periodTag) periodTag.textContent='第'+record.period+'期';
         const lines=card.querySelectorAll('.line');
