@@ -1,3 +1,4 @@
+// Refresh deployment for member posts across lottery types
 import bcrypt from "bcryptjs";
 import { runAutomation } from "./automation.js";
 
