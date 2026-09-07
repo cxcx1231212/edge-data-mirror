@@ -254,7 +254,7 @@
       if(currentType()!==requestedType)return;
       return updateHomepageSection(section, data);
     }).catch(() => {if(currentType()!==requestedType)return;const panel=document.querySelector('.section .more[href="'+section+'.html"]')?.closest('.section');panel?.classList.remove('materials-loading');}));
-            const ready=Promise.allSettled(jobs).then(()=>{if(currentType()!==requestedType)return;document.documentElement.classList.remove('materials-booting');loadTextAds();return loadMemberPostsNative();});
+                const ready=Promise.allSettled(jobs).then(()=>{if(currentType()!==requestedType)return;document.documentElement.classList.remove('materials-booting');loadTextAds();return loadMemberPosts();});
     wuqiAll(requestedType).then(data=>{if(currentType()===requestedType)updateFiveWuqi(data);}).catch(()=>{});
     return ready;
   }
@@ -263,11 +263,7 @@
     if(!document.getElementById('member-post-styles')){const style=document.createElement('style');style.id='member-post-styles';style.textContent='.member-post-list{display:grid;gap:8px;margin:12px 14px 4px}.member-post-link{display:flex;align-items:center;min-width:0;padding:11px 13px;border:1px solid #bfd6f4;border-radius:8px;background:#fff;color:#123f78;text-decoration:none;font-size:15px;font-weight:700}.member-post-link:before{content:"会员贴";flex:0 0 auto;margin-right:9px;padding:3px 7px;border-radius:5px;background:#2467bd;color:#fff;font-size:12px}.member-post-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}@media(max-width:600px){.member-post-list{margin:10px 8px 2px}.member-post-link{padding:10px 9px;font-size:14px}}';document.head.appendChild(style);}
     return fetch('/api/member-posts?limit=10',{cache:'no-store'}).then(response=>response.ok?response.json():Promise.reject()).then(payload=>{if(!payload?.success||!Array.isArray(payload.posts)||!payload.posts.length)return;const list=document.createElement('div');list.className='member-post-list';payload.posts.forEach(post=>{if(!post?.id||!post?.title)return;const link=document.createElement('a');link.className='member-post-link';link.href='/yixiao-member-preview.html?id='+encodeURIComponent(post.id);const title=document.createElement('span');title.className='member-post-title';title.textContent=post.title;link.appendChild(title);list.appendChild(link);});const grid=panel.querySelector('.grid-3');if(grid&&list.childElementCount)grid.before(list);}).catch(()=>{});
   }
-  function loadMemberPostsNative(){
-    const panel=document.querySelector('.section .more[href="yixiao.html"]')?.closest('.section');if(!panel)return Promise.resolve();panel.querySelectorAll('.member-post-entry,.member-post-list').forEach(node=>node.remove());
-    return fetch('/api/member-posts?limit=10',{cache:'no-store'}).then(response=>response.ok?response.json():Promise.reject()).then(payload=>{const grid=panel.querySelector('.grid-3');if(!grid||!payload?.success||!Array.isArray(payload.posts))return;const fragment=document.createDocumentFragment();payload.posts.forEach(post=>{if(!post?.id||!post?.title)return;const card=document.createElement('div');card.className='material title-only member-post-entry';card.setAttribute('role','link');card.tabIndex=0;card.setAttribute('aria-label','查看 '+post.title);const name=document.createElement('div');name.className='name';name.textContent=post.title;const pick=document.createElement('div');pick.className='pick';const open=()=>location.href='/yixiao-member-preview.html?id='+encodeURIComponent(post.id);card.onclick=open;card.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();open();}};card.append(name,pick);fragment.appendChild(card);});grid.prepend(fragment);}).catch(()=>{});
-  }
-function updateSiteNetworkTitle(type=currentType()){
+  function updateSiteNetworkTitle(type=currentType()){
     const names={1:'香港',5:'澳门',8:'天天'},title=document.getElementById('siteNetworkTitle');
     if(title)title.textContent='↓↓★★★'+(names[type]||'澳门')+'连准网站推荐★★★↓↓';
   }
