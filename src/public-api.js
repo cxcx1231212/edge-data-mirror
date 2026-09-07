@@ -18,8 +18,8 @@ export async function handleApi(request, env) {
 }
 async function memberPosts(url,db){
   const id=Math.max(0,Number(url.searchParams.get("id")||0));
-  if(id){const post=await db.prepare("SELECT id,source_name AS title,content,created_at,updated_at FROM materials WHERE id=? AND section_key='member' AND published=1 LIMIT 1").bind(id).first();return post?json({success:true,post}):json({success:false,message:"会员贴不存在"},404);}
-  const limit=Math.min(50,Math.max(1,Number(url.searchParams.get("limit")||20))),{results=[]}=await db.prepare("SELECT id,source_name AS title,created_at,updated_at FROM materials WHERE section_key='member' AND published=1 ORDER BY id DESC LIMIT ?").bind(limit).all();
+  if(id){const post=await db.prepare("SELECT id,lottery_type,source_name AS title,content,COALESCE(NULLIF(result_special,''),'yixiao') AS board,hit_status AS history,created_at,updated_at FROM materials WHERE id=? AND section_key='member' AND published=1 LIMIT 1").bind(id).first();return post?json({success:true,post:{...post,history:Number(post.history)||20}}):json({success:false,message:"会员贴不存在"},404);}
+  const type=validTypes.has(Number(url.searchParams.get("lotteryType")))?Number(url.searchParams.get("lotteryType")):5,limit=Math.min(50,Math.max(1,Number(url.searchParams.get("limit")||20))),{results=[]}=await db.prepare("SELECT id,lottery_type,source_name AS title,COALESCE(NULLIF(result_special,''),'yixiao') AS board,created_at,updated_at FROM materials WHERE section_key='member' AND published=1 AND (lottery_type=? OR result_special IS NULL OR result_special='') ORDER BY id DESC LIMIT ?").bind(type,limit).all();
   return json({success:true,posts:results});
 }
 async function upstreamJson(target){
