@@ -7,6 +7,7 @@ export async function handleApi(request, env) {
   if(path==="/api/ads.php"&&request.method==="GET")return ads(env.DB,env);
   if(path==="/api/site-links"&&request.method==="GET")return siteLinks(env);
   if(path==="/api/text-ads"&&request.method==="GET")return textAds(env);
+    if(path==="/api/member-posts"&&request.method==="GET")return memberPosts(url,env.DB);
   if(path==="/api/track.php"&&request.method==="POST")return track(request,env.DB);
   if(path==="/api/track-ad.php"&&request.method==="POST")return trackAd(request,env.DB);
   if(path==="/api/wuqi.php"&&request.method==="GET")return handleWuqi(url);
@@ -14,6 +15,12 @@ export async function handleApi(request, env) {
   if(path==="/api/history.php"&&request.method==="GET")return history(url);
   if(path==="/api/chat/v1"&&(request.method==="GET"||request.method==="POST"))return serviceChat(request);
   return null;
+}
+async function memberPosts(url,db){
+  const id=Math.max(0,Number(url.searchParams.get("id")||0));
+  if(id){const post=await db.prepare("SELECT id,source_name AS title,content,created_at,updated_at FROM materials WHERE id=? AND section_key='member' AND published=1 LIMIT 1").bind(id).first();return post?json({success:true,post}):json({success:false,message:"会员贴不存在"},404);}
+  const limit=Math.min(50,Math.max(1,Number(url.searchParams.get("limit")||20))),{results=[]}=await db.prepare("SELECT id,source_name AS title,created_at,updated_at FROM materials WHERE section_key='member' AND published=1 ORDER BY id DESC LIMIT ?").bind(limit).all();
+  return json({success:true,posts:results});
 }
 async function upstreamJson(target){
   try{const response=await fetch(target,{headers:{accept:"application/json","user-agent":"Mozilla/5.0"}});if(!response.ok)throw new Error(`HTTP ${response.status}`);const payload=await response.json();return json(payload);}catch(error){console.error("public_upstream_failed",target,error?.message||error);return json({message:"数据加载失败"},502);}
