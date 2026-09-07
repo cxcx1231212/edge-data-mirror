@@ -240,7 +240,7 @@
     ['yixiao','erxiao','sanxiao','liuxiao','weishu','sanzhongsan','erzhonger','chengyu'].forEach(section => {
       const more=document.querySelector('.section .more[href="'+section+'.html"]');
       const panel=more&&more.closest('.section');
-      if(!panel)return;
+      if(!panel)return;margin:0
       const openList=event=>{if(event.target.closest('a,button'))return;location.href=section+'.html';};
       const title=panel.querySelector('.section-title .left');
       const staticTitleSections=['yixiao','erxiao','weishu','sanzhongsan','erzhonger','chengyu'];
@@ -260,7 +260,7 @@
   }
     function loadMemberPosts(){
     const panel=document.querySelector('.section .more[href="yixiao.html"]')?.closest('.section');if(!panel)return Promise.resolve();panel.querySelector('.member-post-list')?.remove();
-    if(!document.getElementById('member-post-styles')){const style=document.createElement('style');style.id='member-post-styles';style.textContent='.member-post-list{display:grid;gap:8px;margin:12px 14px 4px}.member-post-link{display:flex;align-items:center;min-width:0;padding:11px 13px;border:1px solid #bfd6f4;border-radius:8px;background:#fff;color:#123f78;text-decoration:none;font-size:15px;font-weight:700}.member-post-link:before{content:"会员贴";flex:0 0 auto;margin-right:9px;padding:3px 7px;border-radius:5px;background:#2467bd;color:#fff;font-size:12px}.member-post-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}@media(max-width:600px){.member-post-list{margin:10px 8px 2px}.member-post-link{padding:10px 9px;font-size:14px}}';document.head.appendChild(style);}
+          const style=document.createElement('style');style.id='member-post-styles';style.textContent='.member-post-list{display:block;margin:0}.member-post-link{display:flex;align-items:center;justify-content:center;min-height:48px;padding:9px 10px;border:0;border-bottom:1px solid #29251d;background:#0c0d0e;color:#f0cf69;text-decoration:none;font-size:15px;font-weight:800;text-align:center}.member-post-link:nth-child(even){background:#101112}.member-post-title{width:100%;line-height:1.45;white-space:normal;overflow-wrap:anywhere}@media(max-width:430px){.member-post-link{min-height:56px;padding:7px 8px;font-size:13px}}';document.head.appendChild(style);
     return fetch('/api/member-posts?limit=10',{cache:'no-store'}).then(response=>response.ok?response.json():Promise.reject()).then(payload=>{if(!payload?.success||!Array.isArray(payload.posts)||!payload.posts.length)return;const list=document.createElement('div');list.className='member-post-list';payload.posts.forEach(post=>{if(!post?.id||!post?.title)return;const link=document.createElement('a');link.className='member-post-link';link.href='/yixiao-member-preview.html?id='+encodeURIComponent(post.id);const title=document.createElement('span');title.className='member-post-title';title.textContent=post.title;link.appendChild(title);list.appendChild(link);});const grid=panel.querySelector('.grid-3');if(grid&&list.childElementCount)grid.before(list);}).catch(()=>{});
   }
   function updateSiteNetworkTitle(type=currentType()){
