@@ -7,7 +7,7 @@ export async function handleApi(request, env) {
   if(path==="/api/ads.php"&&request.method==="GET")return ads(env.DB,env);
   if(path==="/api/site-links"&&request.method==="GET")return siteLinks(env);
   if(path==="/api/text-ads"&&request.method==="GET")return textAds(env);
-    if(path==="/api/member-posts"&&request.method==="GET")return memberPosts(url,env.DB);
+    if(path==="/api/member-posts"&&request.method==="GET")return memberPosts(url,env);
   if(path==="/api/track.php"&&request.method==="POST")return track(request,env.DB);
   if(path==="/api/track-ad.php"&&request.method==="POST")return trackAd(request,env.DB);
   if(path==="/api/wuqi.php"&&request.method==="GET")return handleWuqi(url);
@@ -16,11 +16,13 @@ export async function handleApi(request, env) {
   if(path==="/api/chat/v1"&&(request.method==="GET"||request.method==="POST"))return serviceChat(request);
   return null;
 }
-async function memberPosts(url,db){
-  const id=Math.max(0,Number(url.searchParams.get("id")||0));
-  if(id){const post=await db.prepare("SELECT id,lottery_type,source_name AS title,content,COALESCE(NULLIF(result_special,''),'yixiao') AS board,hit_status AS history,created_at,updated_at FROM materials WHERE id=? AND section_key='member' AND published=1 LIMIT 1").bind(id).first();return post?json({success:true,post:{...post,history:Number(post.history)||20}}):json({success:false,message:"会员贴不存在"},404);}
-  const type=validTypes.has(Number(url.searchParams.get("lotteryType")))?Number(url.searchParams.get("lotteryType")):5,limit=Math.min(50,Math.max(1,Number(url.searchParams.get("limit")||20))),{results=[]}=await db.prepare("SELECT id,lottery_type,source_name AS title,COALESCE(NULLIF(result_special,''),'yixiao') AS board,created_at,updated_at FROM materials WHERE section_key='member' AND published=1 AND (lottery_type=? OR result_special IS NULL OR result_special='') ORDER BY id DESC LIMIT ?").bind(type,limit).all();
-  return json({success:true,posts:results});
+async function memberPosts(url,env){
+  const db=env.DB,id=Math.max(0,Number(url.searchParams.get("id")||0));
+  const nextPeriod=async type=>{try{const response=await fetch(`https://6htv70.com/gallerynew/h5/index/lastLotteryRecord?lotteryType=${type}`,{headers:{accept:"application/json","user-agent":"Mozilla/5.0"}}),payload=await response.json(),data=payload?.data||{},current=Number(data.period||data.intPeriod||0),next=Number(data.nextLotteryNumber||data.nextIntLotteryNumber||0);return String(next||current+1||"");}catch{return "";}};
+  const view=(row,next)=>{const raw=String(row.period||""),modern=raw.startsWith("member-v2:");if(!modern)return {...row,title:row.source_name,history:Number(row.hit_status)||20};const author=String(row.source_name||""),kind=raw.slice(10),history=Math.min(200,Math.max(1,Number(row.hit_status)||20)),kindText=/^[【\[]/.test(kind)?kind:`【${kind}】`,title=(next?next+"期：":"")+author+"→"+kindText+`【${history}期中${history}期】`;return {...row,title,author,type:kind,current_data:row.content,history};};
+  if(id){const post=await db.prepare("SELECT id,lottery_type,source_name,period,content,COALESCE(NULLIF(result_special,''),'yixiao') AS board,hit_status,created_at,updated_at FROM materials WHERE id=? AND section_key='member' AND published=1 LIMIT 1").bind(id).first();if(!post)return json({success:false,message:"会员贴不存在"},404);return json({success:true,post:view(post,await nextPeriod(Number(post.lottery_type)||5))});}
+  const type=validTypes.has(Number(url.searchParams.get("lotteryType")))?Number(url.searchParams.get("lotteryType")):5,limit=Math.min(50,Math.max(1,Number(url.searchParams.get("limit")||20))),{results=[]}=await db.prepare("SELECT id,lottery_type,source_name,period,content,COALESCE(NULLIF(result_special,''),'yixiao') AS board,hit_status,created_at,updated_at FROM materials WHERE section_key='member' AND published=1 AND (lottery_type=? OR result_special IS NULL OR result_special='') ORDER BY id DESC LIMIT ?").bind(type,limit).all(),next=await nextPeriod(type);
+  return json({success:true,posts:results.map(row=>view(row,next))});
 }
 async function upstreamJson(target){
   try{const response=await fetch(target,{headers:{accept:"application/json","user-agent":"Mozilla/5.0"}});if(!response.ok)throw new Error(`HTTP ${response.status}`);const payload=await response.json();return json(payload);}catch(error){console.error("public_upstream_failed",target,error?.message||error);return json({message:"数据加载失败"},502);}
