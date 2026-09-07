@@ -1,3 +1,4 @@
+const json = (data, status=200) => Response.json(data, {status,headers:{"access-control-allow-origin":"*","cache-control":"no-store"}});
 const validTypes = new Set([1,5,8]);
 
 export async function handleApi(request, env) {
