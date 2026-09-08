@@ -29,6 +29,8 @@
     .steps{padding:18px 12px;text-align:center;font-size:14px;font-weight:800;line-height:1.9;color:#f6cb51;border-top:1px solid #332a19}
     .steps p{margin:4px 0;color:inherit}
     .steps a{color:#ff4b4b;text-decoration:none;font-weight:900}
+    .shared-detail-footer{margin:14px 0 4px;padding:18px 12px;text-align:center;line-height:1.9;color:#f6cb51;border-top:1px solid #332a19}
+    .shared-detail-footer a{color:#ff4b4b;text-decoration:none;font-weight:900}
     .step-no{color:#ff2525}
     .register{display:inline-block;margin-left:5px;padding:4px 13px;border:1px solid #ff3030;border-radius:4px;background:#b50d0d;color:#fff;text-decoration:none;font-weight:900}
     .tip{margin-top:10px;color:#d7ae47;font-size:12px}
@@ -62,7 +64,7 @@
         <div class="record"><span class="issue">249期:</span><span class="name">《斩钉截铁》</span><span class="category">一肖中特</span><span class="bracket">【</span><span class="pick">猴</span><span class="bracket">】【</span><span class="pick">23</span><span class="bracket">】</span><span class="result">开:猴23准</span></div>
         <div class="record"><span class="issue">250期:</span><span class="name">《斩钉截铁》</span><span class="category">一肖中特</span><span class="locked">【此内容需要注册会员查看】</span></div>
       </div>
-      <div class="steps" id="sharedFooter"></div>
+      <div class="shared-detail-footer" id="sharedFooter"></div>
     </section>
   </main>
   <div id="memberDetailAd"></div>
@@ -79,7 +81,7 @@
 </script>
 <script>
 (async()=>{try{const response=await fetch('/api/shared-footer',{cache:'no-store'}),payload=await response.json();if(response.ok&&payload?.success&&payload.html)document.getElementById('sharedFooter').innerHTML=payload.html}catch(_){}})();
-(async()=>{try{const response=await fetch('/api/ads.php',{cache:'no-store'}),data=await response.json(),item=data?.ads?.detail;if(!response.ok||!item?.image)return;const ad=document.createElement('a');ad.href=item.link||'#';ad.target='_blank';ad.rel='noopener noreferrer';ad.style.cssText='display:block;width:calc(100% - 20px);margin:0 10px 14px;border:1px solid #453a20;border-radius:8px;overflow:hidden;background:#151515;line-height:0';if(!item.link)ad.addEventListener('click',event=>event.preventDefault());const image=document.createElement('img');image.src=item.image;image.alt='内容页广告';image.style.cssText='display:block;width:100%;height:auto;max-height:none;object-fit:contain';ad.appendChild(image);document.getElementById('memberDetailAd')?.appendChild(ad)}catch(_){}})();
+(async()=>{try{const response=await fetch('/api/ads.php',{cache:'no-store'}),data=await response.json(),item=data?.ads?.detail;if(!response.ok||!item?.image)return;const ad=document.createElement('a');ad.href=item.link||'#';ad.target='_blank';ad.rel='noopener noreferrer';ad.style.cssText='display:block;width:100%;margin:10px 0 14px;border:1px solid #453a20;border-radius:8px;overflow:hidden;background:#151515;line-height:0';if(!item.link)ad.addEventListener('click',event=>event.preventDefault());const image=document.createElement('img');image.src=item.image;image.alt='内容页广告';image.style.cssText='display:block;width:100%;height:auto;max-height:none;object-fit:contain';ad.appendChild(image);document.getElementById('memberDetailAd')?.appendChild(ad)}catch(_){}})();
 </script>
 </body>
 </html>
