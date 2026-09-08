@@ -477,7 +477,7 @@
     if(!match[2]&&pageTitles[match[1]]){const heading=document.querySelector('.inner-title');if(heading)heading.textContent=pageTitles[match[1]];document.title=pageTitles[match[1]]+'－一路发平特资料站';}
     ensureAdStyles();
     const list=document.querySelector('.inner-list');
-    if(list){const ad=makeAd(match[2]?'detail':'list',match[2]?'内容页广告位':'列表页广告位');match[2]?list.before(ad):document.querySelector('.topbar')?.after(ad);loadAds();}
+    if(list){const ad=makeAd(match[2]?'detail':'list',match[2]?'内容页广告位':'列表页广告位');match[2]?list.after(ad):document.querySelector('.topbar')?.after(ad);loadAds();}
     track(match[1]);
     match[2] ? renderDetail(match[1]) : renderList(match[1]);
   }
