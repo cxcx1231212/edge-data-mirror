@@ -1,3 +1,4 @@
+import { serveMemberSnapshot, refreshMemberSnapshots } from './member-static.js';
 import { handleApi, handleWuqi } from "./public-api.js";
 import { runAutomation } from "./automation.js";
 import { handleAdmin } from "./admin.js";
@@ -38,6 +39,7 @@ export default {
       return new Response(object.value, {headers:{"content-type":object.metadata?.contentType||"application/octet-stream","cache-control":"public, max-age=31536000, immutable"}});
     }
     if (url.pathname === "/admin" || url.pathname.startsWith("/admin/")) return handleAdmin(request, env);
+    if (request.method === "GET" && url.pathname === "/yixiao-member-preview.html") return serveMemberSnapshot(request, env, ctx);
     if (url.pathname === "/api/page.php") return pagePayload(url, env);
     if (url.pathname === "/wuqi-data.php") return maybeEncrypt(await handleWuqi(url), url);
     if (url.pathname.startsWith("/api/")) {
@@ -52,5 +54,5 @@ export default {
     if (request.method === "GET" && (url.pathname === "/" || url.pathname.endsWith(".html"))) return pageShell();
     return env.STATIC_ASSETS.fetch(request);
   },
-  async scheduled(_controller, env, ctx) { ctx.waitUntil(runAutomation(env.DB)); }
+  async scheduled(_controller, env, ctx) { ctx.waitUntil(Promise.all([runAutomation(env.DB),refreshMemberSnapshots(env)])); }
 };
