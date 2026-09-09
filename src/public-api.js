@@ -8,6 +8,7 @@ export async function handleApi(request, env) {
   if(path==="/api/site-links"&&request.method==="GET")return siteLinks(env);
   if(path==="/api/text-ads"&&request.method==="GET")return textAds(env);
   if(path==="/api/shared-footer"&&request.method==="GET")return sharedFooter(env);
+  if(path==="/api/member-post-register"&&request.method==="GET")return memberPostRegister(env);
   if(path==="/api/member-posts"&&request.method==="GET")return memberPosts(url,env.DB);
   if(path==="/api/track.php"&&request.method==="POST")return track(request,env.DB);
   if(path==="/api/track-ad.php"&&request.method==="POST")return trackAd(request,env.DB);
@@ -16,6 +17,24 @@ export async function handleApi(request, env) {
   if(path==="/api/history.php"&&request.method==="GET")return history(url);
   if(path==="/api/chat/v1"&&(request.method==="GET"||request.method==="POST"))return serviceChat(request);
   return null;
+}
+async function memberPostRegister(env) {
+  try {
+    const response = await env.CENTRAL_LINKS.fetch(new Request("https://tx123lh.q3665.com/api/public/member-post-settings", {
+      headers: {accept: "application/json", "cache-control": "no-cache"},
+      signal: AbortSignal.timeout(5000)
+    }));
+    const payload = await response.json();
+    if (!response.ok || payload?.success !== true) throw new Error("Invalid member post settings response");
+    const value = typeof payload.member_post_current_url === "string" ? payload.member_post_current_url.trim() : "";
+    if (!value) return json({success: false, message: "注册链接暂未配置，请稍后再试"}, 503);
+    const target = new URL(value);
+    if (!["https:", "http:"].includes(target.protocol) || target.username || target.password) throw new Error("Invalid member post registration URL");
+    return new Response(null, {status: 302, headers: {location: target.href, "cache-control": "no-store"}});
+  } catch (error) {
+    console.error("central_member_post_settings_failed", error?.message || error);
+    return json({success: false, message: "注册链接暂时不可用，请稍后再试"}, 502);
+  }
 }
 async function memberPosts(url,db){
   const id=Math.max(0,Number(url.searchParams.get("id")||0));
