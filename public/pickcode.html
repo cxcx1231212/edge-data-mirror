@@ -66,6 +66,16 @@ html,body,#app,.app-site,.pickcode-wrap{width:100%;max-width:100%;overflow-x:hid
 .pickcode-wrap #jsb{left:50%;right:auto;transform:translateX(-50%);max-width:700px}
 @media(max-width:390px){.pickcode-wrap .choose-box .choose-box-item{gap:5px}.pickcode-wrap .choose-box .choose-box-item span{font-size:12px}}
 
+
+/* The ball artwork has a white center, so result digits need dark text. */
+.pickcode-wrap .pickcode-result .result-content span,
+.pickcode-wrap .pickcode-result .result-shama span{
+  color:#153b5b!important;
+  font-weight:900;
+  text-indent:0;
+  text-align:center;
+  line-height:24px;
+}
 </style>
   </head>
 <body>
