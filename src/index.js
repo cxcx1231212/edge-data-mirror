@@ -1,3 +1,4 @@
+import { applyInnerSky } from './inner-sky-theme.js';
 import { serveMemberSnapshot, refreshMemberSnapshots } from './member-static.js';
 import { handleApi, handleWuqi } from "./public-api.js";
 import { runAutomation } from "./automation.js";
@@ -6,7 +7,7 @@ import { encryptJsonPayload } from "../shared/crypto.ts";
 
 const encryptedJson = async data => Response.json(await encryptJsonPayload(data), {headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","access-control-allow-origin":"*"}});
 const wantsEncryption = url => url.searchParams.get("encrypted") === "1";
-const pageShell = () => new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title></title><style>html,body{height:100%;margin:0;background:#0d0d0d}#secure-loader{height:100%;display:grid;place-items:center}.spinner{width:34px;height:34px;border:3px solid #342f23;border-top-color:#e7c75f;border-radius:50%;animation:s .8s linear infinite}#secure-loader p{color:#ddd;font:15px system-ui;text-align:center}@keyframes s{to{transform:rotate(360deg)}}</style></head><body><div id="secure-loader" aria-busy="true"><span class="spinner" aria-hidden="true"></span></div><script type="module" src="/assets/secure/client/page-loader.js"></script></body></html>`, {headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff"}});
+const pageShell = () => new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title></title><style>html,body{height:100%;margin:0;background:#f3faff}#secure-loader{height:100%;display:grid;place-items:center}.spinner{width:34px;height:34px;border:3px solid #d3ebfa;border-top-color:#20a8f4;border-radius:50%;animation:s .8s linear infinite}#secure-loader p{color:#486b85;font:15px system-ui;text-align:center}@keyframes s{to{transform:rotate(360deg)}}</style></head><body><div id="secure-loader" aria-busy="true"><span class="spinner" aria-hidden="true"></span></div><script type="module" src="/assets/secure/client/page-loader.js"></script></body></html>`, {headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff"}});
 
 async function pagePayload(url, env) {
   let path = String(url.searchParams.get("path") || "/");
@@ -16,6 +17,7 @@ async function pagePayload(url, env) {
   const response = await env.STATIC_ASSETS.fetch(new Request(assetUrl, {headers:{accept:"text/html"}}));
   if (!response.ok) return Response.json({message:"数据加载失败"},{status:response.status});
   let html = await response.text();
+  if (path !== "/index.html") html = applyInnerSky(html);
   const title = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.trim() || "";
   html = html.replace(/<title[^>]*>[\s\S]*?<\/title>/i, "<title></title>");
   html = html.replaceAll("https://6htv70.com/gallerynew/h5/index/lastLotteryRecord?lotteryType=", "/api/lottery.php?lotteryType=");

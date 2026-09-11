@@ -1,9 +1,10 @@
+import { applyInnerSky } from './inner-sky-theme.js';
 import { handleApi } from './public-api.js';
 
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const keyFor = post => `member-html:v1:${post.id}:${post.updated_at}`;
 const postQuery = "SELECT id,lottery_type,period,source_name AS title,content,hit_status,updated_at FROM materials WHERE id=? AND section_key='member' AND published=1 LIMIT 1";
-const responseHtml = (html, status=200) => new Response(html,{status,headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'}});
+const responseHtml = (html, status=200) => new Response(applyInnerSky(html),{status,headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'}});
 const errorPage = message => `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>会员贴</title><body style="background:#101010;color:#e6c45e;font:16px system-ui;text-align:center;padding:48px 16px"><p>${escape(message)}</p><a href="/" style="color:inherit">返回首页</a></body></html>`;
 
 async function apiJson(path, env) {
