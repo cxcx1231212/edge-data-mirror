@@ -52,6 +52,20 @@ html,body,#app,.app-site,.pickcode-wrap{width:100%;max-width:100%;overflow-x:hid
 .pickcode-wrap .pickcode-result .result-btn-box{width:100%;gap:10px}
 .pickcode-wrap .pickcode-result .result-btn-box>a,.pickcode-wrap .pickcode-result .result-btn-box>div{flex:1;min-width:0;max-width:90px}
 .pickcode-wrap .site-sticky-top-chouti .getright{right:0}
+
+/* Keep the fixed header, results and scrolling options in one centered column. */
+#app,.app-site{width:100%;max-width:700px;margin-left:auto;margin-right:auto}
+.pickcode-wrap{width:100%;max-width:700px;margin:auto}
+.pickcode-wrap>.site-sticky>.van-sticky--fixed{left:50%;right:auto;transform:translateX(-50%);width:100%;max-width:700px}
+.pickcode-wrap .pickcode-result{width:calc(100% - 20px)!important;max-width:680px!important;left:50%;transform:translateX(-50%)}
+.pickcode-wrap .choose-box{box-sizing:border-box;width:100%;max-width:700px;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:8px}
+.pickcode-wrap .choose-box .choose-box-item{position:static;float:none;width:auto;min-width:0;grid-column:1/-1;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}
+.pickcode-wrap .choose-box .choose-box-item::before,.pickcode-wrap .choose-box .choose-box-item::after{display:none}
+.pickcode-wrap .choose-box .choose-box-item:nth-child(1),.pickcode-wrap .choose-box .choose-box-item:nth-child(2){position:static;float:none;width:auto;grid-column:auto;grid-template-columns:repeat(2,minmax(0,1fr))}
+.pickcode-wrap .choose-box .choose-box-item span,.pickcode-wrap .choose-box .choose-box-item:nth-child(1) span,.pickcode-wrap .choose-box .choose-box-item:nth-child(2) span{float:none;width:auto;min-width:0;margin:0 0 7px}
+.pickcode-wrap #jsb{left:50%;right:auto;transform:translateX(-50%);max-width:700px}
+@media(max-width:390px){.pickcode-wrap .choose-box .choose-box-item{gap:5px}.pickcode-wrap .choose-box .choose-box-item span{font-size:12px}}
+
 </style>
   </head>
 <body>
