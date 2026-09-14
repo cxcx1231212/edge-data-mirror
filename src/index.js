@@ -1,3 +1,4 @@
+import { accessGate, protectResponse } from './access-gate.js';
 import { applyInnerSky } from './inner-sky-theme.js';
 import { serveMemberSnapshot, refreshMemberSnapshots } from './member-static.js';
 import { handleApi, handleWuqi } from "./public-api.js";
@@ -7,7 +8,7 @@ import { encryptJsonPayload } from "../shared/crypto.ts";
 
 const encryptedJson = async data => Response.json(await encryptJsonPayload(data), {headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","access-control-allow-origin":"*"}});
 const wantsEncryption = url => url.searchParams.get("encrypted") === "1";
-const pageShell = () => new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title></title><style>html,body{height:100%;margin:0;background:#f3faff}#secure-loader{height:100%;display:grid;place-items:center}.spinner{width:34px;height:34px;border:3px solid #d3ebfa;border-top-color:#20a8f4;border-radius:50%;animation:s .8s linear infinite}#secure-loader p{color:#486b85;font:15px system-ui;text-align:center}@keyframes s{to{transform:rotate(360deg)}}</style></head><body><div id="secure-loader" aria-busy="true"><span class="spinner" aria-hidden="true"></span></div><script type="module" src="/assets/secure/client/page-loader.js"></script></body></html>`, {headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff"}});
+const pageShell = () => new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title></title><script>if(location.pathname==="/"&&new URLSearchParams(location.search).has("t")){const u=new URL(location.href);u.searchParams.delete("t");u.pathname="/index.html";history.replaceState(null,"",u.pathname+u.search+u.hash)}</script><style>html,body{height:100%;margin:0;background:#f3faff}#secure-loader{height:100%;display:grid;place-items:center}.spinner{width:34px;height:34px;border:3px solid #d3ebfa;border-top-color:#20a8f4;border-radius:50%;animation:s .8s linear infinite}#secure-loader p{color:#486b85;font:15px system-ui;text-align:center}@keyframes s{to{transform:rotate(360deg)}}</style></head><body><div id="secure-loader" aria-busy="true"><span class="spinner" aria-hidden="true"></span></div><script type="module" src="/assets/secure/client/page-loader.js"></script></body></html>`, {headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff"}});
 
 async function pagePayload(url, env) {
   let path = String(url.searchParams.get("path") || "/");
@@ -22,6 +23,7 @@ async function pagePayload(url, env) {
   html = html.replace(/<title[^>]*>[\s\S]*?<\/title>/i, "<title></title>");
   html = html.replaceAll("https://6htv70.com/gallerynew/h5/index/lastLotteryRecord?lotteryType=", "/api/lottery.php?lotteryType=");
   html = html.replaceAll("https://6htv70.com/gallerynew/h5/lottery/search?", "/api/history.php?");
+  html = html.replaceAll('href="/"', 'href="/index.html"');
   const payload = {html,title};
   return wantsEncryption(url) ? encryptedJson(payload) : Response.json(payload,{headers:{"cache-control":"no-store"}});
 }
@@ -32,8 +34,7 @@ async function maybeEncrypt(response, url) {
   catch (error) { console.error("public_response_encryption_failed", error); return Response.json({message:"数据加载失败"},{status:500}); }
 }
 
-export default {
-  async fetch(request, env, ctx) {
+async function businessFetch(request, env, ctx) {
     const url = new URL(request.url);
     if (url.pathname.startsWith("/cf-assets/")) {
       const object = await env.ASSETS_KV.getWithMetadata(url.pathname.slice(1), "arrayBuffer");
@@ -41,7 +42,10 @@ export default {
       return new Response(object.value, {headers:{"content-type":object.metadata?.contentType||"application/octet-stream","cache-control":"public, max-age=31536000, immutable"}});
     }
     if (url.pathname === "/admin" || url.pathname.startsWith("/admin/")) return handleAdmin(request, env);
-    if (request.method === "GET" && url.pathname === "/yixiao-member-preview.html") return serveMemberSnapshot(request, env, ctx);
+    if (request.method === "GET" && url.pathname === "/yixiao-member-preview.html") {
+      const snapshot = await serveMemberSnapshot(request, env, ctx);
+      return new Response((await snapshot.text()).replaceAll('href="/"', 'href="/index.html"'), snapshot);
+    }
     if (url.pathname === "/api/page.php") return pagePayload(url, env);
     if (url.pathname === "/wuqi-data.php") return maybeEncrypt(await handleWuqi(url), url);
     if (url.pathname.startsWith("/api/")) {
@@ -54,7 +58,21 @@ export default {
       }
     }
     if (request.method === "GET" && (url.pathname === "/" || url.pathname.endsWith(".html"))) return pageShell();
+    if (request.method === "GET" && /^\/[A-Za-z0-9_/-]+$/.test(url.pathname)) {
+      const destination = new URL(url);
+      destination.pathname = url.pathname.replace(/\/$/, '') + '.html';
+      const asset = await env.STATIC_ASSETS.fetch(new Request(destination));
+      if (asset.ok) return Response.redirect(destination, 307);
+    }
     return env.STATIC_ASSETS.fetch(request);
+}
+
+export default {
+  async fetch(request, env, ctx) {
+    const gate=await accessGate(request,env);
+    if(gate.response)return request.method==='HEAD'?new Response(null,gate.response):gate.response;
+    const result=await businessFetch(request.method==='HEAD'?new Request(request,{method:'GET'}):request,env,ctx);
+    return gate.admin||gate.asset?result:protectResponse(result,request,gate.cookie);
   },
   async scheduled(_controller, env, ctx) { ctx.waitUntil(Promise.all([runAutomation(env.DB),refreshMemberSnapshots(env)])); }
 };
