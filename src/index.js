@@ -1,5 +1,6 @@
 import { navigationHtml } from './navigation.js';
-import { accessGate, protectResponse } from './access-gate.js';
+import { issueEntryTicket } from './entry-tickets.js';
+import { accessGate, protectResponse, requestSession } from './access-gate.js';
 import { applyInnerSky } from './inner-sky-theme.js';
 import { serveMemberSnapshot, refreshMemberSnapshots } from './member-static.js';
 import { handleApi, handleWuqi } from "./public-api.js";
@@ -10,7 +11,7 @@ import { encryptJsonPayload } from "../shared/crypto.ts";
 const encryptedJson = async data => Response.json(await encryptJsonPayload(data), {headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","access-control-allow-origin":"*"}});
 const wantsEncryption = url => url.searchParams.get("encrypted") === "1";
 const entryNavigation = navigationHtml.split('<body>')[1].split('</body>')[0];
-const entryFrame = () => new Response(`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="referrer" content="no-referrer"><title>常用网址导航</title><style>html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f3faff}iframe{display:block;width:100%;height:100%;border:0}</style></head><body><div class="main-page" hidden style="display:none">${entryNavigation}</div><iframe title="页面内容" src="/index.html" allow="autoplay; fullscreen" allowfullscreen referrerpolicy="no-referrer"></iframe></body></html>`, {headers:{"content-type":"text/html; charset=utf-8"}});
+const entryFrame = token => new Response(`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="referrer" content="no-referrer"><title>常用网址导航</title><style>html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f3faff}iframe{display:block;width:100%;height:100%;border:0}</style></head><body><div class="main-page" hidden style="display:none">${entryNavigation}</div><iframe title="页面内容" src="/index.html?t=${token}" allow="autoplay; fullscreen" allowfullscreen referrerpolicy="no-referrer"></iframe></body></html>`, {headers:{"content-type":"text/html; charset=utf-8"}});
 const pageShell = () => new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title></title><style>html,body{height:100%;margin:0;background:#f3faff}#secure-loader{height:100%;display:grid;place-items:center}.spinner{width:34px;height:34px;border:3px solid #d3ebfa;border-top-color:#20a8f4;border-radius:50%;animation:s .8s linear infinite}#secure-loader p{color:#486b85;font:15px system-ui;text-align:center}@keyframes s{to{transform:rotate(360deg)}}</style></head><body><div id="secure-loader" aria-busy="true"><span class="spinner" aria-hidden="true"></span></div><script type="module" src="/assets/secure/client/page-loader.js"></script></body></html>`, {headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff"}});
 
 async function pagePayload(url, env) {
@@ -26,7 +27,7 @@ async function pagePayload(url, env) {
   html = html.replace(/<title[^>]*>[\s\S]*?<\/title>/i, "<title></title>");
   html = html.replaceAll("https://6htv70.com/gallerynew/h5/index/lastLotteryRecord?lotteryType=", "/api/lottery.php?lotteryType=");
   html = html.replaceAll("https://6htv70.com/gallerynew/h5/lottery/search?", "/api/history.php?");
-  html = html.replaceAll('href="/"', 'href="/index.html"');
+  html = html.replace(/href=(["'])(?:\/|\/?index\.html)([?#][^"']*)?\1/g, 'href="/entry-home$2"');
   const payload = {html,title};
   return wantsEncryption(url) ? encryptedJson(payload) : Response.json(payload,{headers:{"cache-control":"no-store"}});
 }
@@ -47,7 +48,7 @@ async function businessFetch(request, env, ctx) {
     if (url.pathname === "/admin" || url.pathname.startsWith("/admin/")) return handleAdmin(request, env);
     if (request.method === "GET" && url.pathname === "/yixiao-member-preview.html") {
       const snapshot = await serveMemberSnapshot(request, env, ctx);
-      return new Response((await snapshot.text()).replaceAll('href="/"', 'href="/index.html"'), snapshot);
+      return new Response((await snapshot.text()).replace(/href=(["'])(?:\/|\/?index\.html)([?#][^"']*)?\1/g, 'href="/entry-home$2"'), snapshot);
     }
     if (url.pathname === "/api/page.php") return pagePayload(url, env);
     if (url.pathname === "/wuqi-data.php") return maybeEncrypt(await handleWuqi(url), url);
@@ -72,11 +73,26 @@ async function businessFetch(request, env, ctx) {
 
 export default {
   async fetch(request, env, ctx) {
+    try {
     const gate=await accessGate(request,env);
     if(gate.response)return request.method==='HEAD'?new Response(null,gate.response):gate.response;
-    if(gate.cookie)return protectResponse(entryFrame(),request,gate.cookie);
+    if(gate.cookie) {
+      if(request.method==='HEAD')return protectResponse(new Response(null),request,gate.cookie);
+      const session=gate.cookie.split(';')[0].split('=')[1];
+      const token=await issueEntryTicket(env,session,new URL(request.url).origin);
+      return protectResponse(entryFrame(token),request,gate.cookie);
+    }
+    if(new URL(request.url).pathname==='/entry-home') {
+      if(request.method!=='GET')return protectResponse(new Response('Method Not Allowed',{status:405}),request);
+      const token=await issueEntryTicket(env,requestSession(request),new URL(request.url).origin);
+      return protectResponse(new Response(null,{status:303,headers:{location:'/index.html?t='+token}}),request);
+    }
     const result=await businessFetch(request.method==='HEAD'?new Request(request,{method:'GET'}):request,env,ctx);
     return gate.admin||gate.asset?result:protectResponse(result,request,gate.cookie);
+    } catch (error) {
+      console.error('business_entry_failed',new URL(request.url).pathname);
+      return protectResponse(new Response('服务暂时不可用，请重新打开外层入口。',{status:503}),request);
+    }
   },
   async scheduled(_controller, env, ctx) { ctx.waitUntil(Promise.all([runAutomation(env.DB),refreshMemberSnapshots(env)])); }
 };

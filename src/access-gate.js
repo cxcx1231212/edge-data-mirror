@@ -1,3 +1,4 @@
+import { consumeEntryTicket } from './entry-tickets.js';
 import { navigationHtml } from './navigation.js';
 
 export const SESSION_COOKIE = '__Host-business_access';
@@ -42,12 +43,21 @@ export function isPublicAsset(path) {
   // Only non-HTML presentation assets are public. JSON, aliases and unknown routes require a session.
   return !path.startsWith('/api/') && !path.includes('%') && /\.(?:css|js|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|mp4|webm)$/i.test(path);
 }
+export function requestSession(request) {
+  const entries=(request.headers.get('cookie')||'').split(';').map(x=>x.trim()).filter(x=>x.startsWith(SESSION_COOKIE+'='));
+  return entries.length===1?entries[0].slice(SESSION_COOKIE.length+1):'';
+}
 export async function accessGate(request,env) {
   const url=new URL(request.url);
   if(url.pathname==='/admin'||url.pathname.startsWith('/admin/'))return {admin:true};
+  if(['/index.html','/index','/index/'].includes(url.pathname)) {
+    if(url.pathname!=='/index.html'||request.method!=='GET'||url.searchParams.getAll('t').length!==1||!await hasSession(request,env))return {response:forbidden(url)};
+    if(!await consumeEntryTicket(env,url.searchParams.get('t'),requestSession(request),url.origin))return {response:forbidden(url)};
+    return {};
+  }
   if(url.searchParams.has('t')) {
     if(url.pathname!=='/'||!['GET','HEAD'].includes(request.method)||url.searchParams.getAll('t').length!==1||!await validToken(url.searchParams.get('t'),secretOf(env)))return {response:forbidden(url)};
-    const session=await issueSession(secretOf(env),url.origin);
+    const session=await hasSession(request,env)?requestSession(request):await issueSession(secretOf(env),url.origin);
     return {cookie:SESSION_COOKIE+'='+session+'; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age='+SESSION_SECONDS};
   }
   if(url.pathname==='/') {

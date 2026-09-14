@@ -17,7 +17,7 @@
 | `/?t` 或 `/?t=` | 403 |
 | `/?t=无效值` 或重复 t | 403，即使已有会话 |
 
-参数值应经过 URL 编码。成功后服务端签发有效期 24 小时的 HttpOnly、Secure、SameSite=Lax Cookie；浏览器保留带 t 的外层入口地址，外层通过同源 iframe 加载 `/index.html`。内层地址和 HTML 不含入口密钥，使用已签发的 Cookie 验证。页面跳转和同站接口随后使用 Cookie，无须在每个链接中重复 t。Cookie 过期后重新使用带参数入口。更换 Secret 会立即使旧会话失效。
+参数值应经过 URL 编码。成功后服务端签发有效期 24 小时的 HttpOnly、Secure、SameSite=Lax Cookie；浏览器保留带 t 的外层入口地址，外层通过同源 iframe 加载 `/index.html?t=一次性凭证`。内层地址和 HTML 不含入口密钥，使用已签发的 Cookie 验证。页面跳转和同站接口随后使用 Cookie，无须在每个链接中重复 t。Cookie 过期后重新使用带参数入口。更换 Secret 会立即使旧会话失效。
 
 `/index.html`、会员页、其他业务 HTML、无扩展名入口、JSON 数据、`/api/*` 和 `/wuqi-data.php` 都要求有效会话。静态 CSS、JS、图片和字体允许加载。管理后台继续使用原有独立认证。普通导航不会包含业务页面、业务脚本或接口数据。
 
@@ -32,3 +32,12 @@
 2026-09-14 控制台显示此 Worker 的路由为 `ylfptcf.668870.cc/*`，另有 workers.dev 地址；`tx168pt.q3665.com` 未直接列在 Worker 域名绑定中，因此该域名前面的代理配置需要单独核对。修改前该域名根路径实测返回 200。不能仅凭 Worker 配置推断其上游代理规则。
 
 验证：`node --test tests/access-gate.test.mjs tests/member-static.test.mjs`；`pnpm run build`。上线后在目标域名重新检查上述四种情况，以及无 Cookie 请求 `/api/page.php?path=/index.html` 和 `/api/lottery.php` 返回 403，持有效会话时业务接口与资源正常。
+
+
+## 内层首页一次性凭证
+
+外层固定 BUSINESS_ACCESS_TOKEN 不变。每次有效访问外层，使用随机数生成 256 位内层凭证，数据库只保存其 SHA-256 摘要，并绑定当前会话和访问域名。内层首页 GET /index.html?t=... 必须携带匹配的有效 Cookie。数据库通过单条 DELETE 的影响行数原子核销；并发请求也只有一个成功。没有 t、空 t、重复 t、错误 t、已使用 t 均返回 403，即使已有 Cookie。/index 与 /index/ 也不能绕过。
+
+凭证用一次立即失效。未使用凭证最多保留 24 小时以清理积压记录，不表示可在 24 小时内重复使用。重载已消耗的内层 URL 会返回 403；刷新外层固定入口则生成新凭证。站内首页链接改为 /entry-home，该地址验证会话后领取新凭证，再重定向到内层首页。其他业务页和数据接口继续校验会话。
+
+首次签发通过现有 D1 绑定幂等创建 business_entry_tickets 表及过期时间索引，无需新建 Cloudflare 资源或修改现有资料表。数据库异常默认拒绝访问并返回 503，不放行到业务页。凭证值不写入应用日志。
