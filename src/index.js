@@ -8,7 +8,8 @@ import { encryptJsonPayload } from "../shared/crypto.ts";
 
 const encryptedJson = async data => Response.json(await encryptJsonPayload(data), {headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","access-control-allow-origin":"*"}});
 const wantsEncryption = url => url.searchParams.get("encrypted") === "1";
-const pageShell = () => new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title></title><script>if(location.pathname==="/"&&new URLSearchParams(location.search).has("t")){const u=new URL(location.href);u.searchParams.delete("t");u.pathname="/index.html";history.replaceState(null,"",u.pathname+u.search+u.hash)}</script><style>html,body{height:100%;margin:0;background:#f3faff}#secure-loader{height:100%;display:grid;place-items:center}.spinner{width:34px;height:34px;border:3px solid #d3ebfa;border-top-color:#20a8f4;border-radius:50%;animation:s .8s linear infinite}#secure-loader p{color:#486b85;font:15px system-ui;text-align:center}@keyframes s{to{transform:rotate(360deg)}}</style></head><body><div id="secure-loader" aria-busy="true"><span class="spinner" aria-hidden="true"></span></div><script type="module" src="/assets/secure/client/page-loader.js"></script></body></html>`, {headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff"}});
+const entryFrame = () => new Response(`<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="referrer" content="no-referrer"><title>一路发平特资料站</title><style>html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#f3faff}iframe{display:block;width:100%;height:100%;border:0}</style></head><body><iframe title="一路发平特资料" src="/index.html" allow="autoplay; fullscreen" allowfullscreen referrerpolicy="no-referrer"></iframe></body></html>`, {headers:{"content-type":"text/html; charset=utf-8"}});
+const pageShell = () => new Response(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title></title><style>html,body{height:100%;margin:0;background:#f3faff}#secure-loader{height:100%;display:grid;place-items:center}.spinner{width:34px;height:34px;border:3px solid #d3ebfa;border-top-color:#20a8f4;border-radius:50%;animation:s .8s linear infinite}#secure-loader p{color:#486b85;font:15px system-ui;text-align:center}@keyframes s{to{transform:rotate(360deg)}}</style></head><body><div id="secure-loader" aria-busy="true"><span class="spinner" aria-hidden="true"></span></div><script type="module" src="/assets/secure/client/page-loader.js"></script></body></html>`, {headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff"}});
 
 async function pagePayload(url, env) {
   let path = String(url.searchParams.get("path") || "/");
@@ -71,6 +72,7 @@ export default {
   async fetch(request, env, ctx) {
     const gate=await accessGate(request,env);
     if(gate.response)return request.method==='HEAD'?new Response(null,gate.response):gate.response;
+    if(gate.cookie)return protectResponse(entryFrame(),request,gate.cookie);
     const result=await businessFetch(request.method==='HEAD'?new Request(request,{method:'GET'}):request,env,ctx);
     return gate.admin||gate.asset?result:protectResponse(result,request,gate.cookie);
   },
