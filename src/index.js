@@ -82,6 +82,15 @@ export default {
       const token=await issueEntryTicket(env,session,new URL(request.url).origin);
       return protectResponse(entryFrame(token),request,gate.cookie);
     }
+    // Exchange the consumed ticket for a session URL before rendering. Browser
+    // back/reload must never request an already-consumed ticket from history.
+    if(new URL(request.url).pathname==='/index.html') {
+      return protectResponse(new Response(null,{status:303,headers:{location:'/entry-page'}}),request);
+    }
+    if(new URL(request.url).pathname==='/entry-page') {
+      if(!['GET','HEAD'].includes(request.method))return protectResponse(new Response('Method Not Allowed',{status:405}),request);
+      return protectResponse(pageShell(),request);
+    }
     if(new URL(request.url).pathname==='/entry-home') {
       if(request.method!=='GET')return protectResponse(new Response('Method Not Allowed',{status:405}),request);
       const token=await issueEntryTicket(env,requestSession(request),new URL(request.url).origin);

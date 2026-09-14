@@ -1,6 +1,7 @@
 import {DatabaseSync} from 'node:sqlite';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import worker from '../src/index.js';
 import {issueSession,SESSION_COOKIE,SESSION_SECONDS} from '../src/access-gate.js';
 const secret='test-only-credential-'.repeat(3);
@@ -10,6 +11,29 @@ const DB={prepare(query){let values=[];return {bind(...v){values=v;return this},
 const env={DB,BUSINESS_ACCESS_TOKEN:secret,STATIC_ASSETS:{fetch:async()=>new Response('<html><title>Business</title><a href="/">Home</a></html>')}};
 const req=(path,headers={},method='GET')=>new Request(origin+path,{headers,method});
 const run=(path,headers={},e=env,method='GET')=>worker.fetch(req(path,headers,method),e,{});
+test('return and reload use a session URL without replaying the consumed ticket',async()=>{
+  const outer=await run('/?t='+secret);
+  const cookie=outer.headers.get('set-cookie').split(';')[0];
+  const ticket=(await outer.text()).match(/src="([^"]+)"/)[1];
+  const exchange=await run(ticket,{cookie});
+  assert.equal(exchange.status,303);
+  const destination=exchange.headers.get('location');
+  assert.equal(destination,'/entry-page');
+  for(let i=0;i<3;i++) {
+    const page=await run(destination,{cookie});
+    assert.equal(page.status,200);assert.match(await page.text(),/page-loader/);
+    assert.equal(page.headers.get('cache-control'),'private, no-store, no-transform');
+  }
+  assert.equal((await run(ticket,{cookie})).status,403);
+  assert.equal((await run(destination)).status,403);
+  assert.equal((await run(destination,{cookie:cookie+'bad'})).status,403);
+  const expired=SESSION_COOKIE+'='+await issueSession(secret,origin,Date.now()-(SESSION_SECONDS+5)*1000);
+  assert.equal((await run(destination,{cookie:expired})).status,403);
+  assert.equal((await run(destination,{cookie},env,'POST')).status,405);
+  const head=await run(destination,{cookie},env,'HEAD');assert.equal(head.status,200);assert.equal(await head.text(),'');
+  const loader=readFileSync(new URL('../client/page-loader.ts',import.meta.url),'utf8');
+  assert.match(loader,/location.pathname === "\/entry-page" \? "\/index.html" : location.pathname/);
+});
 test('four entry cases, isolated navigation, cookie, no token in response',async()=>{
   const nav=await run('/');assert.equal(nav.status,200);const html=await nav.text();assert.match(html,/常用网址导航/);assert.doesNotMatch(html,/page-loader|Business|api\//);
   const valid=await run('/?t='+encodeURIComponent(secret));assert.equal(valid.status,200);const entry=await valid.text();assert.match(entry,/<iframe[^>]+src="\/index.html\?t=[a-f0-9]{64}"/);assert.doesNotMatch(entry,/page-loader|history.replaceState/);assert.ok(!entry.includes(secret));
@@ -22,7 +46,7 @@ test('HTML, aliases, JSON, APIs and member snapshots require session',async()=>{
   const cookie=SESSION_COOKIE+'='+await issueSession(secret,origin);
   assert.equal((await run('/index.html',{cookie})).status,403);
   const outer=await run('/?t='+secret,{cookie});const ticket=(await outer.text()).match(/src="([^"]+)"/)[1];
-  const inner=await run(ticket,{cookie});assert.equal(inner.status,200);const innerHtml=await inner.text();assert.match(innerHtml,/page-loader/);assert.doesNotMatch(innerHtml,/<iframe/);
+  const exchange=await run(ticket,{cookie});assert.equal(exchange.status,303);assert.equal(exchange.headers.get('location'),'/entry-page');const inner=await run('/entry-page',{cookie});assert.equal(inner.status,200);const innerHtml=await inner.text();assert.match(innerHtml,/page-loader/);assert.doesNotMatch(innerHtml,/<iframe/);
   const payload=await run('/api/page.php?path=/index.html',{cookie});assert.equal(payload.status,200);assert.match((await payload.json()).html,/href="\/entry-home"/);
   assert.equal(payload.headers.get('cache-control'),'private, no-store, no-transform');assert.equal(payload.headers.get('access-control-allow-origin'),null);
   assert.equal((await run('/?t=',{cookie})).status,403);assert.match(await (await run('/',{cookie})).text(),/常用网址导航/);
@@ -48,9 +72,9 @@ test('one-time tickets reject replay, missing tokens and concurrent requests; ho
   const otherCookie=SESSION_COOKIE+'='+await issueSession(secret,origin);
   assert.equal((await run(path,{cookie:otherCookie})).status,403);
   const statuses=await Promise.all(Array.from({length:6},async()=> (await run(path,{cookie})).status));
-  assert.equal(statuses.filter(s=>s===200).length,1);assert.equal(statuses.filter(s=>s===403).length,5);
+  assert.equal(statuses.filter(s=>s===303).length,1);assert.equal(statuses.filter(s=>s===403).length,5);
   const back=await run('/entry-home',{cookie});assert.equal(back.status,303);
   const next=back.headers.get('location');assert.notEqual(next,path);
-  assert.equal((await run(next,{cookie})).status,200);assert.equal((await run(next,{cookie})).status,403);
+  assert.equal((await run(next,{cookie})).status,303);assert.equal((await run(next,{cookie})).status,403);
   assert.equal((await run('/entry-home')).status,403);
 });

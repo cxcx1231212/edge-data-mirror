@@ -23,7 +23,7 @@ window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Res
 async function mount(): Promise<void> {
   try {
     const endpoint = new URL("/api/page.php", location.origin);
-    endpoint.searchParams.set("path", location.pathname);
+    endpoint.searchParams.set("path", location.pathname === "/entry-page" ? "/index.html" : location.pathname);
     endpoint.searchParams.set("encrypted", "1");
     const payload = await readEncryptedResponse<PagePayload>(await nativeFetch(endpoint, { cache: "no-store" }));
     document.title = payload.title;
