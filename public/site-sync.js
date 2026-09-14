@@ -449,7 +449,7 @@
       document.querySelectorAll('.banner-ad[data-ad-position]').forEach(ad=>{const item=data.ads&&data.ads[ad.dataset.adPosition];if(!item)return;const image=ad.querySelector('img');image.addEventListener('load',()=>sendAdEvent(ad.dataset.adPosition,'view'),{once:true});image.src=item.image;ad.dataset.active='1';if(item.link){ad.href=item.link;ad.target='_blank';ad.rel='noopener noreferrer';}else ad.removeAttribute('href');
         ad.addEventListener('click',()=>sendAdEvent(ad.dataset.adPosition,'click'));
       });
-      const file=location.pathname.split('/').pop()||'index.html';if(file==='index.html')showPopupAd(data.ads&&data.ads.popup);
+      const file=location.pathname === '/entry-page' ? 'index.html' : (location.pathname.split('/').pop()||'index.html');if(file==='index.html')showPopupAd(data.ads&&data.ads.popup);
     }).catch(()=>{});
   }
   function loadTextAds(){
@@ -461,7 +461,7 @@
   }
   function boot() {
     ensureThreeStyles();
-    const file = location.pathname.split('/').pop() || 'index.html';
+    const file = location.pathname === '/entry-page' ? 'index.html' : (location.pathname.split('/').pop() || 'index.html');
     if (file === 'index.html' || file === '') {
       ensureAdStyles();
       document.querySelectorAll('section.card.section').forEach((section,index)=>{
