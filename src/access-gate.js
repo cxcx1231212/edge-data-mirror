@@ -34,7 +34,7 @@ export async function hasSession(request, env, now=Date.now()) {
   if(expires<=seconds||expires>seconds+SESSION_SECONDS)return false;
   return crypto.subtle.verify('HMAC',await sessionKey(secret),bytes(match[3]),encoder.encode(new URL(request.url).origin+'\0'+match[1]));
 }
-const response = (body,status=200,type='text/html; charset=utf-8') => new Response(body,{status,headers:{'content-type':type,'cache-control':'private, no-store','referrer-policy':'no-referrer','x-content-type-options':'nosniff','x-site-gate':'v1'}});
+const response = (body,status=200,type='text/html; charset=utf-8') => new Response(body,{status,headers:{'content-type':type,'cache-control':'private, no-store, no-transform','referrer-policy':'no-referrer','x-content-type-options':'nosniff','x-site-gate':'v1'}});
 export function forbidden(url) {
   if(url.pathname.startsWith('/api/')||url.pathname==='/wuqi-data.php')return response(JSON.stringify({success:false,message:'Forbidden'}),403,'application/json; charset=utf-8');
   return response('<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>403</title><body><h1>403 Forbidden</h1><p>访问凭证无效或已过期。</p><a href="/">返回网址导航</a></body></html>',403);
@@ -74,7 +74,7 @@ export async function accessGate(request,env) {
 }
 export function protectResponse(result,request,cookie) {
   const headers=new Headers(result.headers);
-  headers.set('cache-control','private, no-store');headers.set('referrer-policy','no-referrer');headers.set('x-site-gate','v1');
+  headers.set('cache-control','private, no-store, no-transform');headers.set('referrer-policy','no-referrer');headers.set('x-site-gate','v1');
   headers.delete('access-control-allow-origin');headers.delete('access-control-allow-credentials');
   if(cookie)headers.append('set-cookie',cookie);
   return new Response(request.method==='HEAD'?null:result.body,{status:result.status,statusText:result.statusText,headers});

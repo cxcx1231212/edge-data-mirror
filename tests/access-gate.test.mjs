@@ -24,7 +24,7 @@ test('HTML, aliases, JSON, APIs and member snapshots require session',async()=>{
   const outer=await run('/?t='+secret,{cookie});const ticket=(await outer.text()).match(/src="([^"]+)"/)[1];
   const inner=await run(ticket,{cookie});assert.equal(inner.status,200);const innerHtml=await inner.text();assert.match(innerHtml,/page-loader/);assert.doesNotMatch(innerHtml,/<iframe/);
   const payload=await run('/api/page.php?path=/index.html',{cookie});assert.equal(payload.status,200);assert.match((await payload.json()).html,/href="\/entry-home"/);
-  assert.equal(payload.headers.get('cache-control'),'private, no-store');assert.equal(payload.headers.get('access-control-allow-origin'),null);
+  assert.equal(payload.headers.get('cache-control'),'private, no-store, no-transform');assert.equal(payload.headers.get('access-control-allow-origin'),null);
   assert.equal((await run('/?t=',{cookie})).status,403);assert.match(await (await run('/',{cookie})).text(),/常用网址导航/);
 });
 test('tampering, expiry, rotation, origin binding and cross-site mutation rejected',async()=>{
