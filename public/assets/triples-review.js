@@ -67,7 +67,7 @@ function boot() {
         const article = element('article','triples-review-row','');
         article.append(element('h3','',row.year+'年 · 第'+row.period+'期'));
         const groups = element('div','triples-review-groups','');
-        row.groups.forEach(group => {
+        row.groups.slice(0,1).forEach(group => {
           const groupNode = element('span','triples-review-group','');
           group.forEach((number,index) => {
             const numberNode = element('span',row.regular.includes(number) ? 'triples-review-group-number is-hit' : 'triples-review-group-number',number);
