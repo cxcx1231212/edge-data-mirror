@@ -20,13 +20,14 @@ export async function handleApi(request, env) {
 }
 async function memberPostRegister(env) {
   try {
-    const response = await env.CENTRAL_LINKS.fetch(new Request("https://123-liuhe-site/api/public/member-post-settings", {
+    const response = await env.CENTRAL_LINKS.fetch(new Request("https://123-liuhe-site/api/public/member-posts?lotteryType=5", {
       headers: {accept: "application/json", "cache-control": "no-cache"},
       signal: AbortSignal.timeout(5000)
     }));
     const payload = await response.json();
+    const first = Array.isArray(payload?.data) ? payload.data[0] : null;
+    const value = typeof first?.global_current_url === "string" ? first.global_current_url.trim() : "";
     if (!response.ok || payload?.success !== true) throw new Error("Invalid member post settings response");
-    const value = typeof payload.member_post_current_url === "string" ? payload.member_post_current_url.trim() : "";
     if (!value) return json({success: false, message: "注册链接暂未配置，请稍后再试"}, 503);
     const target = new URL(value);
     if (!["https:", "http:"].includes(target.protocol) || target.username || target.password) throw new Error("Invalid member post registration URL");
