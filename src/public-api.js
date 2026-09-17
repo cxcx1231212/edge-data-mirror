@@ -20,21 +20,20 @@ export async function handleApi(request, env) {
 }
 async function memberPostRegister(env) {
   try {
-    const response = await env.CENTRAL_LINKS.fetch(new Request("https://123-liuhe-site/api/public/member-posts?lotteryType=5", {
+    const response = await env.CENTRAL_LINKS.fetch(new Request("https://123-liuhe-site/api/public/site-settings", {
       headers: {accept: "application/json", "cache-control": "no-cache"},
       signal: AbortSignal.timeout(5000)
     }));
     const payload = await response.json();
-    const first = Array.isArray(payload?.data) ? payload.data[0] : null;
-    const value = typeof first?.global_current_url === "string" ? first.global_current_url.trim() : "";
-    if (!response.ok || payload?.success !== true) throw new Error("Invalid member post settings response");
-    if (!value) return json({success: false, message: "注册链接暂未配置，请稍后再试"}, 503);
+    const value = typeof payload?.data?.registration_url === "string" ? payload.data.registration_url.trim() : "";
+    if (!response.ok || payload?.success !== true) throw new Error("Invalid site settings response");
+    if (!value) return json({success: false, message: "链接暂未配置，请稍后再试"}, 503);
     const target = new URL(value);
-    if (!["https:", "http:"].includes(target.protocol) || target.username || target.password) throw new Error("Invalid member post registration URL");
+    if (!["https:", "http:"].includes(target.protocol) || target.username || target.password) throw new Error("Invalid registration URL");
     return new Response(null, {status: 302, headers: {location: target.href, "cache-control": "no-store"}});
   } catch (error) {
-    console.error("central_member_post_settings_failed", error?.message || error);
-    return json({success: false, message: "注册链接暂时不可用，请稍后再试"}, 502);
+    console.error("central_registration_url_failed", error?.message || error);
+    return json({success: false, message: "链接暂时不可用，请稍后再试"}, 502);
   }
 }
 async function memberPosts(url,db){
