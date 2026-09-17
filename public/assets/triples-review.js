@@ -14,6 +14,13 @@ export function reviewRows(records, year) {
   }).sort((a,b) => Number(b.period) - Number(a.period)).slice(0, 2);
 }
 
+export const chronologicalRows = rows => [...rows].sort((a,b) => b.year-a.year || Number(b.period)-Number(a.period)).slice(0,2).reverse();
+export function nextDrawPeriod(payload) {
+  if (payload?.code !== 10000) return null;
+  const value = payload.data?.nextLotteryNumber || payload.data?.nextIntLotteryNumber;
+  return /^\d{1,8}$/.test(String(value)) && Number(value)>0 ? String(Number(value)) : null;
+}
+
 function boot() {
   const host = document.getElementById('triples-review');
   if (!host) return;
@@ -48,8 +55,12 @@ function boot() {
         if (payload?.code !== 10000 || !Array.isArray(payload?.data?.recordList)) throw Error('invalid_history');
         return reviewRows(payload.data.recordList,y);
       }
+      const latestRequest = fetch('/api/lottery.php?lotteryType='+type,{cache:'no-store',signal:activeController.signal})
+        .then(response=>response.ok?response.json():null).then(nextDrawPeriod).catch(()=>null);
       let rows = await read(year);
       if (rows.length < 2) rows = [...rows,...await read(year-1)].slice(0,2);
+      rows = chronologicalRows(rows);
+      const nextPeriod = await latestRequest;
       if (id !== version) return;
       list.replaceChildren();
       for (const row of rows) {
@@ -61,6 +72,11 @@ function boot() {
         list.append(article);
       }
       if (!rows.length) list.append(element('p','triples-review-status','暂无完整的历史开奖记录'));
+      const pending = element('article','triples-review-row triples-review-pending','');
+      pending.append(element('h3','',nextPeriod?'第'+nextPeriod+'期 · 六组三中三':'最新一期 · 六组三中三'),
+        element('p','triples-review-status',nextPeriod?'待开奖':'最新期数同步中'),
+        element('p','triples-review-special','开奖后更新历史复盘'));
+      list.append(pending);
     } catch {
       if (id === version) list.replaceChildren(element('p','triples-review-status','历史数据暂不可用，稍后自动重试'));
     } finally {

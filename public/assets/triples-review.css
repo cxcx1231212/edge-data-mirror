@@ -10,4 +10,6 @@
 .triples-review-open{font-size:14px;font-weight:700;margin:10px 0 4px;color:#cf304b;line-height:1.6;overflow-wrap:anywhere}
 .triples-review-special{margin:0;font-size:13px;color:#537c95}
 .triples-review-status{padding:20px 6px;margin:0;font-size:14px;color:#537c95}
+.triples-review-pending{background:linear-gradient(#f7fbff,#ebf5ff);padding:16px 7px}
+.triples-review-pending .triples-review-status{padding:9px 6px;color:#0876b9;font-size:18px;font-weight:700}
 @media(max-width:359px){.triples-review-group{font-size:15px;padding:3px 6px}.triples-review-groups{gap:6px 8px}.triples-review-list{padding:0 6px 6px}.triples-review-open{font-size:12px}}

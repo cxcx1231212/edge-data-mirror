@@ -1,7 +1,17 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {reviewRows} from '../public/assets/triples-review.js';
+import {reviewRows,chronologicalRows,nextDrawPeriod} from '../public/assets/triples-review.js';
 const draw=(period,numbers=[1,2,3,4,5,6,7])=>({period,numberList:numbers.map(number=>({number}))});
+test('two latest periods display oldest first, including year rollover',()=>{
+  assert.deepEqual(chronologicalRows(reviewRows([draw(257),draw(259),draw(258)],2026)).map(r=>r.period),['258','259']);
+  assert.deepEqual(chronologicalRows([{year:2026,period:'1'},{year:2025,period:'365'}]).map(r=>r.period),['365','1']);
+});
+test('pending period comes from the upstream schedule, never an invented increment',()=>{
+  assert.equal(nextDrawPeriod({code:10000,data:{nextLotteryNumber:'260'}}),'260');
+  assert.equal(nextDrawPeriod({code:10000,data:{nextIntLotteryNumber:1}}),'1');
+  for(const data of [{},{nextLotteryNumber:'bad'},{nextLotteryNumber:0},{period:259}])assert.equal(nextDrawPeriod({code:10000,data}),null);
+  assert.equal(nextDrawPeriod({code:500,data:{nextLotteryNumber:260}}),null);
+});
 test('historical examples are stable, unique and contain only that draw regular numbers',()=>{
   const input=[draw(257),draw(259),draw(258)];
   const rows=reviewRows(input,2026);assert.deepEqual(rows.map(r=>r.period),['259','258']);
