@@ -68,7 +68,15 @@ function boot() {
         article.append(element('h3','',row.year+'年 · 第'+row.period+'期'));
         const groups = element('div','triples-review-groups','');
         row.groups.forEach(group => groups.append(element('span','triples-review-group',group.join(' · '))));
-        article.append(groups,element('p','triples-review-open','当期平码：'+row.regular.join(' · ')),element('p','triples-review-special','特码：'+row.special));
+        const result = element('div','triples-review-result','');
+        const regular = element('div','triples-review-result-line','');
+        regular.append(element('span','triples-review-result-label','开奖号码'));
+        row.regular.forEach(number => regular.append(element('span','triples-review-ball triples-review-ball-regular',number)));
+        const special = element('div','triples-review-result-line triples-review-result-special','');
+        special.append(element('span','triples-review-result-label','特码'));
+        special.append(element('span','triples-review-ball triples-review-ball-special',row.special));
+        article.append(groups,result);
+        result.append(regular,special);
         list.append(article);
       }
       if (!rows.length) list.append(element('p','triples-review-status','暂无完整的历史开奖记录'));
