@@ -13,6 +13,7 @@
 .triples-review-result-label{min-width:55px;color:#527a96;font-size:12px;font-weight:700;text-align:right}
 .triples-review-ball{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;color:#fff;font-size:12px;font-weight:800;line-height:1;box-shadow:inset 0 -2px 0 #0002,0 1px 3px #0a74b433}
 .triples-review-ball-regular{background:linear-gradient(145deg,#ff675d,#e42a2a)}
+.triples-review-ball.is-hit{box-shadow:inset 0 -2px 0 #0002,0 0 0 2px #ffc83b,0 1px 5px #d89e1180}
 .triples-review-result-special{padding-left:2px}
 .triples-review-result-plus{font-size:20px;color:#1687ce;font-weight:800;line-height:1}
 .triples-review-ball-special{background:linear-gradient(145deg,#43aef2,#0878c9)}
