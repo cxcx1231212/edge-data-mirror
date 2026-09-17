@@ -18,6 +18,9 @@
 .triples-review-pending h3{font-size:16px;line-height:1.5;color:#0063c9;margin:0 0 9px}
 .triples-review-text-link{display:block;color:#0063c9;text-decoration:none;font-size:14px;font-weight:700;line-height:1.5}
 .triples-review-caption{margin:4px 0 8px;color:#0063c9;font-size:13px;line-height:1.5;font-weight:600}
-.triples-review-history-button{display:block;box-sizing:border-box;width:76%;max-width:280px;min-height:45px;margin:0 auto;padding:8px 5px;border:2px solid #ffc83b;border-radius:8px;background:linear-gradient(100deg,#ff4939,#ff171f);color:#fff;text-decoration:none;font-size:18px;font-weight:800;line-height:1.4;box-shadow:0 3px 10px #e9543540}
+.triples-review-history-button{display:block;box-sizing:border-box;width:76%;max-width:280px;min-height:45px;margin:0 auto;padding:8px 5px;border:2px solid #ffc83b;border-radius:8px;background:linear-gradient(100deg,#ff4939,#ff171f);color:#fff;text-decoration:none;font-size:18px;font-weight:800;line-height:1.4;box-shadow:0 3px 10px #e9543540;animation:triples-button-pulse 1.65s ease-in-out infinite;will-change:transform,box-shadow}
 .triples-review-history-button:hover{background:linear-gradient(100deg,#f43d2e,#e8121a)}
+.triples-review-history-button:active{animation:none;transform:translateY(1px) scale(.98);box-shadow:0 1px 4px #e9543540}
 .triples-review-history-button:focus-visible,.triples-review-text-link:focus-visible{outline:3px solid #0876b9;outline-offset:3px}
+@keyframes triples-button-pulse{0%,100%{transform:translateY(0) scale(1);box-shadow:0 3px 10px #e9543540}50%{transform:translateY(-3px) scale(1.035);box-shadow:0 8px 18px #e9543561}}
+@media(prefers-reduced-motion:reduce){.triples-review-history-button{animation:none}}
