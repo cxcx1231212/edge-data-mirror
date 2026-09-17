@@ -6,17 +6,20 @@
 .triples-review-row h3{margin:0 0 9px;font-size:16px;line-height:1.5;color:#0767a4}
 .triples-review-groups{display:grid;grid-template-columns:repeat(2,max-content);justify-content:center;gap:7px 12px}
 .triples-review-group{font-size:17px;font-weight:700;color:#0060be;padding:3px 8px;border:1px solid #c6e2ff;border-radius:4px;background:#fff;line-height:1.5;font-variant-numeric:tabular-nums}
-.triples-review-result{margin:11px auto 0;display:grid;gap:6px;max-width:310px;padding:8px 9px;border-top:1px dashed #b9dbf5;background:#fff;border-radius:6px}
-.triples-review-result-line{display:flex;align-items:center;justify-content:center;gap:6px;min-height:25px;font-variant-numeric:tabular-nums}
+.triples-review-group-number{display:inline-block;border-radius:3px;padding:0 1px}
+.triples-review-group-number.is-hit{padding:0 4px;background:#fff0bb;color:#d03922;box-shadow:inset 0 0 0 1px #ffbf36}
+.triples-review-result{margin:11px auto 0;display:flex;align-items:center;justify-content:center;gap:7px;max-width:340px;padding:8px 7px;border-top:1px dashed #b9dbf5;background:#fff;border-radius:6px}
+.triples-review-result-line{display:flex;align-items:center;justify-content:center;gap:5px;min-height:25px;font-variant-numeric:tabular-nums}
 .triples-review-result-label{min-width:55px;color:#527a96;font-size:12px;font-weight:700;text-align:right}
 .triples-review-ball{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;color:#fff;font-size:12px;font-weight:800;line-height:1;box-shadow:inset 0 -2px 0 #0002,0 1px 3px #0a74b433}
 .triples-review-ball-regular{background:linear-gradient(145deg,#ff675d,#e42a2a)}
-.triples-review-result-special{padding-top:6px;border-top:1px solid #e3f0fb}
+.triples-review-result-special{padding-left:2px}
+.triples-review-result-plus{font-size:20px;color:#1687ce;font-weight:800;line-height:1}
 .triples-review-ball-special{background:linear-gradient(145deg,#43aef2,#0878c9)}
 .triples-review-status{padding:20px 6px;margin:0;font-size:14px;color:#537c95}
 .triples-review-pending{background:linear-gradient(#f7fbff,#ebf5ff);padding:16px 7px}
 .triples-review-pending .triples-review-status{padding:9px 6px;color:#0876b9;font-size:18px;font-weight:700}
-@media(max-width:359px){.triples-review-group{font-size:15px;padding:3px 6px}.triples-review-groups{gap:6px 8px}.triples-review-list{padding:0 6px 6px}.triples-review-result{padding:7px 5px}.triples-review-result-line{gap:4px}.triples-review-ball{width:22px;height:22px;font-size:11px}.triples-review-result-label{min-width:49px;font-size:11px}}
+@media(max-width:359px){.triples-review-group{font-size:15px;padding:3px 6px}.triples-review-groups{gap:6px 8px}.triples-review-list{padding:0 6px 6px}.triples-review-result{gap:4px;padding:7px 4px}.triples-review-result-line{gap:3px}.triples-review-ball{width:21px;height:21px;font-size:10px}.triples-review-result-label{min-width:43px;font-size:11px}.triples-review-result-plus{font-size:17px}}
 
 .triples-review-pending{padding:14px 7px 18px;background:linear-gradient(#f7fbff,#edf6ff)}
 .triples-review-pending h3{font-size:16px;line-height:1.5;color:#0063c9;margin:0 0 9px}
