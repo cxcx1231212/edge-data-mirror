@@ -67,13 +67,21 @@ function boot() {
         const article = element('article','triples-review-row','');
         article.append(element('h3','',row.year+'年 · 第'+row.period+'期'));
         const groups = element('div','triples-review-groups','');
-        row.groups.forEach(group => groups.append(element('span','triples-review-group',group.join(' · '))));
+        row.groups.forEach(group => {
+          const groupNode = element('span','triples-review-group','');
+          group.forEach((number,index) => {
+            const numberNode = element('span',row.regular.includes(number) ? 'triples-review-group-number is-hit' : 'triples-review-group-number',number);
+            groupNode.append(numberNode);
+            if (index < group.length - 1) groupNode.append(document.createTextNode(' · '));
+          });
+          groups.append(groupNode);
+        });
         const result = element('div','triples-review-result','');
         const regular = element('div','triples-review-result-line','');
         regular.append(element('span','triples-review-result-label','开奖号码'));
         row.regular.forEach(number => regular.append(element('span','triples-review-ball triples-review-ball-regular',number)));
         const special = element('div','triples-review-result-line triples-review-result-special','');
-        special.append(element('span','triples-review-result-label','特码'));
+        special.append(element('span','triples-review-result-plus','+'));
         special.append(element('span','triples-review-ball triples-review-ball-special',row.special));
         article.append(groups,result);
         result.append(regular,special);
