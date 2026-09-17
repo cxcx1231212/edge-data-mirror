@@ -14,8 +14,10 @@ export function reviewRows(records, year) {
     let seed = (Number(period) + numbers.reduce((total,number) => total + number, 0)) >>> 0;
     const next = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed; };
     const take = () => String(available.splice(next() % available.length, 1)[0]).padStart(2, '0');
-    const groups = [regular.slice(0,3),...Array.from({length:5},() => [take(),take(),take()])];
-    return [{period, year, regular, special: String(numbers[6]).padStart(2, '0'), groups}];
+    const hitGroupIndex = next() % 6;
+    const distractors = Array.from({length:5},() => [take(),take(),take()]);
+    const groups = Array.from({length:6},(_,index) => index === hitGroupIndex ? regular.slice(0,3) : distractors.shift());
+    return [{period, year, regular, special: String(numbers[6]).padStart(2, '0'), groups, hitGroupIndex}];
   }).sort((a,b) => Number(b.period) - Number(a.period)).slice(0, 2);
 }
 
@@ -72,7 +74,7 @@ function boot() {
         const article = element('article','triples-review-row','');
         article.append(element('h3','',row.year+'年 · 第'+row.period+'期'));
         const groups = element('div','triples-review-groups','');
-        const hitGroupIndex = 0;
+        const hitGroupIndex = row.hitGroupIndex;
         row.groups.forEach((group,groupIndex) => {
           const groupNode = element('span','triples-review-group','');
           group.forEach((number,index) => {
