@@ -1,0 +1,13 @@
+.triples-review{margin:0 0 10px;background:#fff;border:1px solid #a6d9fa;border-radius:10px;overflow:hidden;text-align:center;color:#075d94}
+.triples-review>h2{margin:0;padding:11px 8px;background:#39baf2;color:#fff;font-size:20px;line-height:1.4;letter-spacing:1px}
+.triples-review-note{margin:0;padding:9px 6px 3px;font-size:13px;line-height:1.6;color:#537c95}
+.triples-review-lottery{margin:0;padding:2px 6px 8px;font-size:14px;font-weight:700}
+.triples-review-list{padding:0 9px 9px;display:grid;gap:8px}
+.triples-review-row{padding:11px 7px;border:1px solid #8fc9ff;border-radius:8px;background:#f5faff}
+.triples-review-row h3{margin:0 0 9px;font-size:16px;line-height:1.5;color:#0767a4}
+.triples-review-groups{display:grid;grid-template-columns:repeat(2,max-content);justify-content:center;gap:7px 12px}
+.triples-review-group{font-size:17px;font-weight:700;color:#0060be;padding:3px 8px;border:1px solid #c6e2ff;border-radius:4px;background:#fff;line-height:1.5;font-variant-numeric:tabular-nums}
+.triples-review-open{font-size:14px;font-weight:700;margin:10px 0 4px;color:#cf304b;line-height:1.6;overflow-wrap:anywhere}
+.triples-review-special{margin:0;font-size:13px;color:#537c95}
+.triples-review-status{padding:20px 6px;margin:0;font-size:14px;color:#537c95}
+@media(max-width:359px){.triples-review-group{font-size:15px;padding:3px 6px}.triples-review-groups{gap:6px 8px}.triples-review-list{padding:0 6px 6px}.triples-review-open{font-size:12px}}
