@@ -73,9 +73,15 @@ function boot() {
       }
       if (!rows.length) list.append(element('p','triples-review-status','暂无完整的历史开奖记录'));
       const pending = element('article','triples-review-row triples-review-pending','');
-      pending.append(element('h3','',nextPeriod?'第'+nextPeriod+'期 · 六组三中三':'最新一期 · 六组三中三'),
-        element('p','triples-review-status',nextPeriod?'待开奖':'最新期数同步中'),
-        element('p','triples-review-special','开奖后更新历史复盘'));
+      const historyLink = (className,text) => {
+        const link = element('a',className,text);
+        link.href = '/history.html?lotteryType='+type;
+        return link;
+      };
+      pending.append(element('h3','',nextPeriod?nextPeriod+'期六组三中三':'最新一期六组三中三'),
+        historyLink('triples-review-text-link','【点击查看历史开奖记录】'),
+        element('p','triples-review-caption',nextPeriod?'本期待开奖 · 查看往期开奖记录':'最新期数同步中 · 查看往期开奖记录'),
+        historyLink('triples-review-history-button','查看历史开奖记录'));
       list.append(pending);
     } catch {
       if (id === version) list.replaceChildren(element('p','triples-review-status','历史数据暂不可用，稍后自动重试'));
