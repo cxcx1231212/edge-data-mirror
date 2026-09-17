@@ -20,7 +20,7 @@ export async function handleApi(request, env) {
 }
 async function memberPostRegister(env) {
   try {
-    const response = await env.CENTRAL_LINKS.fetch(new Request("https://tx123lh.q3665.com/api/public/member-post-settings", {
+    const response = await env.CENTRAL_LINKS.fetch(new Request("https://central-links.internal/api/public/member-post-settings", {
       headers: {accept: "application/json", "cache-control": "no-cache"},
       signal: AbortSignal.timeout(5000)
     }));
