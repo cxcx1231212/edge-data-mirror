@@ -103,9 +103,9 @@ function boot() {
         return link;
       };
       pending.append(element('h3','',nextPeriod?nextPeriod+'期六组三中三':'最新一期六组三中三'),
-        configuredLink('triples-review-text-link','【点击查看相关资料】'),
-        element('p','triples-review-caption',nextPeriod?'本期待开奖 · 点击查看相关资料':'最新期数同步中 · 点击查看相关资料'),
-        configuredLink('triples-review-history-button','查看相关资料'));
+        configuredLink('triples-review-text-link','【点击领取资料】'),
+        element('p','triples-review-caption',nextPeriod?'本期待开奖 · 点击领取资料':'最新期数同步中 · 点击领取资料'),
+        configuredLink('triples-review-history-button','点击领取资料'));
       list.append(pending);
     } catch {
       if (id === version) list.replaceChildren(element('p','triples-review-status','历史数据暂不可用，稍后自动重试'));
