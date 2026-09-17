@@ -9,7 +9,12 @@ export function reviewRows(records, year) {
     seen.add(period);
     const regular = numbers.slice(0, 6).map(n => String(n).padStart(2, '0'));
     // Six fixed examples from the completed draw, stable across reloads.
-    const groups = [[0,1,2],[0,3,4],[1,3,5],[2,4,5],[0,2,5],[1,2,4]].map(indexes => indexes.map(i => regular[i]));
+    const excluded = new Set(numbers);
+    const available = Array.from({length:49},(_,index) => index + 1).filter(number => !excluded.has(number));
+    let seed = (Number(period) + numbers.reduce((total,number) => total + number, 0)) >>> 0;
+    const next = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed; };
+    const take = () => String(available.splice(next() % available.length, 1)[0]).padStart(2, '0');
+    const groups = [regular.slice(0,3),...Array.from({length:5},() => [take(),take(),take()])];
     return [{period, year, regular, special: String(numbers[6]).padStart(2, '0'), groups}];
   }).sort((a,b) => Number(b.period) - Number(a.period)).slice(0, 2);
 }
